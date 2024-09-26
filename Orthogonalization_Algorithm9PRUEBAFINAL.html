@@ -1,0 +1,3298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ibliogrootstrap Example</title>
+    <meta <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Estilo básico para el menú y el área de resultado */
+        #result {
+            margin-top: 20px;
+            white-space: pre; /* Para mantener el formato de las matrices */
+        }
+
+        /* Estilo para el separador */
+        option.separator {
+            font-weight: bold;
+            font-style: italic;
+            color: gray;
+        }
+    </style>
+    <style>
+        /* Add some basic styling */
+        #latex-output {
+            font-size: 16px;
+            margin: 20px;
+        }
+    </style>
+    <!-- -->
+        <style>
+            .list-item {
+                color: blue;
+            }
+            .explanation {
+                color: black;
+            }
+            #contentDivid {
+                display: none;
+                margin-top: 20px;
+            }
+        </style>
+    <style>
+        body {
+            font-size: 14px;
+            line-height: 1.2;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 16px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+        /**
+        .file-input-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        **/
+        .file-upload-container {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 20px;
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            text-align: center;
+            font-size: 16px;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        .file-upload-container.dragging {
+            background-color: #e6e6e6;
+            border-color: #999;
+        }
+
+        .custom-file-label {
+            display: inline-block;
+            margin-left: 10px;
+            color: #555;
+        }
+
+        button {
+            font-size: 14px;
+            padding: 8px 12px;
+            margin-top: 15px;
+        }
+        /*
+        #matrix-output-1, #vector-output-1, #matrix-output-2, #vector-output-2 {
+            font-size: 13px;
+            line-height: 1.1;
+            margin-top: 5px;
+        }
+        */
+    </style>
+    
+    <style>
+        /* Remove the navbar's default margin-bottom and rounded borders */
+
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
+        /* Add a gray background color and some padding to the footer */
+
+        footer {
+            background-color: #f2f2f2;
+            padding: 25px;
+        }
+        
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
+            text-align: center;
+        }
+        th {	
+            background-color: lightblue;
+        }
+        table tr:nth-child(even) {
+            background-color: #eee;
+        }
+        table tr:nth-child(odd) {
+        background-color: #fff;
+        }
+
+    </style>
+    <style>
+        .bibliography {
+            margin-top: 20px;
+        }
+        .bibliography {
+            font-size: 14px;
+        }
+        .bibliography ul {
+            list-style-type: circle;
+        }
+        .bibliography li {
+            margin-bottom: 1em; /* Aumenta el espacio entre referencias */
+        }
+        .bibliography b {
+            font-weight: bold;
+        }
+        h2 {
+            text-align: center; /* Centra el título */
+        }
+    </style>
+</head>
+
+<body>
+    <style>
+        /**
+        .thumb {
+            height: 75px;
+            border: 1px solid #000;
+            margin: 10px 5px 0 0;
+        }
+        **/
+    </style>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar">1</span>
+                    <span class="icon-bar">2</span>
+                    <span class="icon-bar">3</span>
+                </button>
+                <a class="navbar-brand" href="#">Software for solving algebra problems</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+
+    <div class="jumbotron"  id="jumboid">
+        <div class="container text-center">
+            <h1 id="Algorithm"><b>Orthogonalization Algorithm</b></h1>
+            <p id="explanation">You must provide a matrix with its rows the generators of the linear subspace and the initial matrix if different from the identity matrix</p>
+            <div style="text-align:center;">
+                <button id="ChangeAlgid" onclick="changeAlgorithm()">Change Algorithm</button>
+            <br>
+            <button onclick="executeAlgorithm()">Generate tables</button>
+            <button id="printButton" onclick="ff1(event)">Print tables</button>
+            <button onclick="showApplications()">Applications</button>
+            <button id="bibliografiaBtn">Personal Bibliography</button>
+            <br>
+            <button id="systemEqButton" onclick="systemeq1()">No Equation Problem</button>     
+            <h2>Example data</h2>
+            <select id="menu" onchange="mostrarResultado()">
+                <option value="">Example data</option>
+                <option value="Subspacecomplement">Subspace and complement</option>
+                <option value="Invertmatrix">Invert a matrix</option>
+                <option value="Determinant">Determinant</option>
+                <option value="Matrixrank">Matrix rank</option>
+                <option value="Updateinverse">Update inverse</option>
+                <option value="Vectorinspace">Vector in space</option>
+                <option value="Subspaceintersection">Subspace intersection</option>
+                <option value="Homogeneousequalitysystem">Homogeneous equality system</option>
+                <option value="Completeequalitysystem">Complete equality system</option>
+                <option value="Systemequalitycompatibility">System equality compatibility</option>
+
+                <option class="separator" disabled>──────────</option> <!-- Separador -->
+
+                <option value="Dualcone">Dual cone</option>
+                <option value="Dualconestandardform">Dual cone standard form</option>
+                <option value="Vectorincone">Vector in cone</option>
+                <option value="Coneintersection1">Cone intersection1</option>
+                <option value="Coneintersection2">Cone intersection2</option>
+                <option value="Homogeneousinequalitysystem">Homogeneous inequality system</option>
+                <option value="Completeinequalitysystem">Complete inequality system</option>
+                <option value="Systeminequalitycompatibility">System inequality compatibility</option>
+            </select>  
+        </div>
+        <br>
+        <label for="precisionInput">Precission:</label>
+        <input type="text" id="precisionInput" onchange="updatePrecision()" value="1.0e-12" step="any">
+        <label for="digitsInput"> digits:</label>
+        <input type="text" id="digitsInput" onchange="updatedigitsInput()" value="6" step="any">
+        </div>
+    </div>
+    <div id="contentDivid">
+        <div style="text-align:center;">
+            <button onclick="goBack()">Volver</button>
+        </div>
+        <br>
+        <br>
+        <ol id="dynamicList"></ol>
+    </div>
+
+
+
+    <div class="container-fluid bg-3 text-center">
+        <div class="row" id="rowid">
+            <div class="col-md-6 col-sm-12">
+                <div class="file-upload-container" id="dropArea1">
+                    <input type="file" id="file-input-1" accept=".txt">
+                    <span id="file-label-1" class="custom-file-label" style="color: blue;"><b>(Drag file here)</b></span>
+                </div>
+                <h3>Data matrix</h3>
+                <br>
+                <p>
+                    <textarea id='input-matrix'  readonly="readonly" style='width:100%; height:15em;'></textarea>
+                    <div class="output-textbox-botones">
+                    </div>
+                </p>
+                <output id="list"></output>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="file-upload-container" id="dropArea2">
+                    <input type="file" id="file-input-2" accept=".txt">
+                    <span id="file-label-2" class="custom-file-label" color=blue><b>(Drag file here)</b></span>
+                </div>
+                <h3>Initial matrix</h3>
+                <br>
+                <p>
+                    <textarea id='input-matrix1' readonly="readonly" style='width:100%; height:15em;'></textarea>
+                    <div class="output-textbox-botones">
+                    </div>
+                </p>
+            </div>
+        </div>
+    </div>
+
+        <div id="warning" style="display:none;">
+            <p>Este contenido puede consumir una gran cantidad de datos. ¿Estás seguro de que quieres continuar?</p>
+            <button onclick="proceed()">Sí</button>
+            <button onclick="cancel()">No</button>
+        </div>
+    
+        <script src="script.js"></script>
+
+    <div id="tablas" text-center></div>
+    <footer class="container-fluid text-center">
+        <p>Below are the tables provided by the algorithm</p>
+    </footer>
+
+    <style>
+        .centrado {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Ajusta la altura según tus necesidades */
+            border: 1px solid #000; /* Solo para visualizar el div */
+        }
+        h1 {
+            text-align: center;
+        }
+        table { 
+            border-collapse: collapse; 
+            margin: auto; /* Centra la tabla horizontalmente */
+        }
+        th, td { border: 1px solid black; padding: 8px; text-align: center; }
+        th.subespacio, td.subespacio { background-color: lightgreen; }
+        th.cono, td.cono { background-color: lightblue; }
+        th.politopo, td.politopo { background-color: lightyellow; }
+    </style>
+    <div class="centrado" id="SEquationsid">
+        <h1><b>System equations solutions</b></h1>
+        <p><b>The linear space (v), cone (w) and polytope (z) generators are given in the columns of the following table with different colors</b></p>
+        <div id="tabla-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="subespacio">Linear Space</th>
+                        <th class="cono">Cone</th>
+                        <th class="politopo">Polytope</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="subespacio">Data 1</td>
+                        <td class="cono">Data 2</td>
+                        <td class="politopo">Data 3</td>
+                    </tr>
+                    <!-- Más filas aquí -->
+                </tbody>
+            </table>
+        </div>
+        <button onclick="generarLatex(encabezado, C, ficherodatos, listaficherosgenerados)">Generate LaTeX and download</button>
+    </div>
+  
+    <script type="text/javascript">
+            document.getElementById('SEquationsid').style.display = 'none';
+            alllatex='';
+            ficherodatos='Initial';
+            alllatex='\\documentclass{article}\n ' +'\\begin{document}\n ';
+            table='';
+
+            // document.getElementById('file-input-1').addEventListener('change', (evt) => processSelectedFiles(evt, 'M'));
+            // document.getElementById('file-input-2').addEventListener('change', (evt) => processSelectedFiles1(evt, 'M1'));
+            // La función startInput se encarga de escuchar cambios en un campo de entrada de archivo HTML. 
+            // Al seleccionar un archivo, esta función utiliza un FileReader para leer el contenido del archivo como texto.
+            // Una vez leído el archivo, el contenido se inserta en un campo de texto o div específico (definido por el ID 'divinputid').
+            // Si la opción 'option' es verdadera, llama a la función InitializeInitialmatrix para realizar acciones adicionales.
+            function startInput(fileinput, divinputid, option) {
+                 // Al seleccionar un archivo, esta función utiliza un FileReader para leer el contenido del archivo como texto.
+                // Una vez leído el archivo, el contenido se inserta en un campo de texto o div específico (definido por el ID 'divinputid').
+                // Si la opción 'option' es verdadera, llama a la función InitializeInitialmatrix para realizar acciones adicionales.
+
+                // Agrega un evento 'change' al campo de entrada de archivo.
+                document.getElementById(fileinput).addEventListener('change', function(event) {
+                    const file = event.target.files[0]; // Obtiene el primer archivo seleccionado.
+
+                    if (file) {
+                        const reader = new FileReader(); // Crea un nuevo lector de archivos.
+
+                        // Cuando el archivo es leído exitosamente, ejecuta esta función.
+                        reader.onload = function(e) {
+                            const content = e.target.result; // Obtiene el contenido del archivo.
+                            // Inserta el contenido en el elemento HTML con el ID especificado.
+                            document.getElementById(divinputid).value = content;
+                            
+                            // Si la opción es verdadera, inicializa la matriz inicial.
+                            if (option) {
+                                InitializeInitialmatrix();
+                            }
+                        };
+
+                        reader.readAsText(file); // Inicia la lectura del archivo como texto.
+                    }
+
+                });
+            }
+
+            function printtables(){
+                window.print();
+            }
+
+             function ff1(event) {
+                // La función ff1 maneja dos comportamientos dependiendo de si la tecla Ctrl está presionada cuando se llama la función.
+                // Si se presiona Ctrl, alterna el contenido y la acción del botón 'printButton' entre 'Print tables' y 'Tutorial'.
+                // Si no se presiona Ctrl, muestra una alerta y ejecuta la función printtables para imprimir tablas.
+
+                // Verifica si la tecla Ctrl está presionada.
+                if (event.ctrlKey) {
+                    const button = document.getElementById('printButton');
+                    // Cambia el botón a 'Tutorial' o 'Print tables', según el estado actual.
+                    if (button.innerHTML === 'Print tables') {
+                        button.innerHTML = 'Tutorial';
+                        // Cambia la función a ejecutar cuando se hace clic en el botón.
+                        button.setAttribute('onclick', 'tutorial(event)');
+                    } else {
+                        button.innerHTML = 'Print tables';
+                        button.setAttribute('onclick', 'ff1(event)');
+                    }
+                } else {
+                    // Si Ctrl no está presionada, muestra una alerta e imprime las tablas.
+                    alert('Función ff1 ejecutada');
+                    printtables();
+                }
+            }
+
+             function tutorial(event) {
+                // La función tutorial es similar a la función ff1, pero cambia entre 'Tutorial' y 'Print tables' cuando Ctrl está presionado.
+                // Además, si Ctrl no está presionado, ejecuta funciones adicionales como mostrar información en la interfaz.
+                // La función está diseñada para manejar la interacción con el tutorial, pero puede extenderse a otras funcionalidades.
+
+                if (event.ctrlKey) {
+                    const button = document.getElementById('printButton');
+                    // Alterna entre 'Print tables' y 'Tutorial' de la misma manera que en ff1.
+                    if (button.innerHTML === 'Tutorial') {
+                        button.innerHTML = 'Print tables';
+                        button.setAttribute('onclick', 'ff1(event)');
+                    } else {
+                        button.innerHTML = 'Tutorial';
+                        button.setAttribute('onclick', 'tutorial(event)');
+                    }
+                } else {
+                    // Cuando Ctrl no está presionado, ejecuta la función mostrarInformacion.
+                    // Se añade un listener para asegurar que mostrarInformacion se ejecute cuando el DOM esté completamente cargado.
+                    mostrarInformacion();
+                    document.addEventListener('DOMContentLoaded', (event) => {
+                        mostrarInformacion();
+                    });
+                }
+            }
+
+            function analyzeCode() {
+            const scripts = document.querySelectorAll('script');
+            let scriptContent = '';
+
+            scripts.forEach(script => {
+                if (script.textContent) {
+                    scriptContent += script.textContent;
+                }
+            });
+
+            if (!scriptContent) {
+                console.error('No se encontró contenido en los scripts.');
+                return;
+            }
+
+            // Buscar variables globales
+            const globalVars = scriptContent.match(/var\s+\w+/g) || [];
+            const globalVarNames = globalVars.map(v => v.split(' ')[1]);
+
+            // Buscar funciones
+            const functions = scriptContent.match(/function\s+\w+/g) || [];
+            const functionNames = functions.map(f => f.split(' ')[1]);
+
+            // Variables locales
+            const localVars = scriptContent.match(/let\s+\w+/g) || [];
+            const localVarNames = localVars.map(v => v.split(' ')[1]);
+
+            // Funciones usadas y no usadas
+            const usedFunctions = functionNames.filter(fn => new RegExp(`\\b${fn}\\(`).test(scriptContent));
+            const unusedFunctions = functionNames.filter(fn => !usedFunctions.includes(fn));
+
+            // Crear listas de funciones usadas con sus variables globales y locales
+            const usedFunctionsDetails = usedFunctions.map(fn => {
+                const fnContent = scriptContent.match(new RegExp(`function\\s+${fn}\\s*\\([^)]*\\)\\s*{[^}]*}`, 'g'))[0];
+                const fnGlobalVars = globalVarNames.filter(varName => new RegExp(`\\b${varName}\\b`).test(fnContent));
+                const fnLocalVars = localVarNames.filter(varName => new RegExp(`\\b${varName}\\b`).test(fnContent));
+                return {
+                    functionName: fn,
+                    globalVars: fnGlobalVars,
+                    localVars: fnLocalVars
+                };
+            });
+
+            const resultContent = `
+                Funciones usadas con sus variables:
+                ${usedFunctionsDetails.map(fn => `
+                Función: ${fn.functionName}
+                Variables globales: ${fn.globalVars.join(', ')}
+                Variables locales: ${fn.localVars.join(', ')}
+                `).join('\n')}
+                Funciones no usadas:
+                ${unusedFunctions.join('\n')}
+            `;
+
+            // Crear un enlace para descargar el archivo
+            const blob = new Blob([resultContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'ResultadosAnalisis.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+                // Función para mostrar información
+        function mostrarInformacion() {
+
+            openVideo('https://youtu.be/Jp0Iw-6ebkk')
+
+            var info = "Funciones Definidas:\n";
+            var funcionesDefinidas = [];
+            var variablesGlobales = ['globalVar1', 'globalVar2']; // Lista de variables globales definidas en el código
+
+            // Obtener todas las funciones definidas en el objeto window
+            for (var prop in window) {
+                if (window.hasOwnProperty(prop) && typeof window[prop] === 'function') {
+                    funcionesDefinidas.push(prop);
+                }
+            }
+
+            // Listar funciones definidas con su código y variables
+            funcionesDefinidas.forEach(function(func) {
+                info += "\n" + func + ":\n" + window[func].toString() + "\n";
+                info += "Variables Locales:\n";
+                var funcStr = window[func].toString();
+                var localVars = funcStr.match(/(var|let|const)\s+\w+/g);
+                if (localVars) {
+                    localVars.forEach(function(localVar) {
+                        info += localVar + "\n";
+                    });
+                }
+                info += "Variables Globales:\n";
+                variablesGlobales.forEach(function(globalVar) {
+                    info += globalVar + ": " + window[globalVar] + "\n";
+                });
+                info += "\n-----------------------------\n"; // Línea de separación entre funciones
+            });
+
+            // Guardar la información en un archivo de texto
+            var blob = new Blob([info], { type: "text/plain;charset=utf-8" });
+            var link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "informacion.txt";
+            link.click();
+        }
+    
+
+            startInput('file-input-1', 'input-matrix',1)
+            startInput('file-input-2', 'input-matrix1',0)
+    
+            AA = [];// Variable para almacenar la matriz
+            AA1 = []; // Variable para almacenar la matriz
+            tt = '';// text variable para almacenar la matriz identidad
+            matrixtype=0 // Data Matrix atrixtype=11 Initial matrix
+            vectortype = []; // Variable para almacenar el vector
+            systemequations = false;
+            systemeq()
+            listaficherosgenerados='';
+
+            // Define la variable de precisión
+            precisionval = 1.0e-12;
+            digits=6;
+            fname='default';
+            f1name='defaul1t';
+            niterations=20;
+
+            explamationmessage1 = "You must provide a matrix with its rows the generators of the linear subspace and (optionally) the initial matrix if different from the identity matrix.";
+            explamationmessage2 = "You must provide a matrix with its columns the cone generators. The cone can be generated by linear space generators or cone generators. This must be indicated by giving a line with zeros or ones, respectively (see the example case).";
+            
+            examplecone = "0,1,1,0,1,0,1,1" + "\n" + "0,1,0,1,0,1,1,2" + "\n" + "0,1,0,0,-1,0,-1,1" + "\n" + "0,1,1,-1,1,0,0,2" + "\n" + "-1,1,0,1,0,1,2,0" + "\n" + "\n" + "1,1,1,1,1,1,1,1";
+            examplecone = "0,1,0,0,1,1,1,0" + "\n" + "0,0,0,1,1,0,2,2" + "\n" + "0,0,1,0,1,-1,1,0" + "\n" + "0,0,0,1,1,0,1,1" + "\n" + "-1,1,-1,0,1,0,0,0" + "\n" + "\n" + "1,1,1,1,1,1,1,1";
+            examplelinearspace = "1,1,0,1" + "\n" + " 0,1,0,1" + "\n" + "0,0,-1,1" + "\n" + "-1,2,1,0" + "\n";
+            initialcone = "1,0,0,0,0" + "\n" + "0,1,0,0,0" + "\n" + "0,0,1,0,0" + "\n" + "0,0,0,1,0" + "\n" + "0,0,0,0,1" + "\n" + "\n" + "0,0,0,0,0";
+            initiallinearspace = convertmatrixtotext(identitymatrix(4));
+           
+            // processMatrixAndVector1(examplecone)
+
+            //examplelinearspace = [[1,1,0,1], [0,1,0,1], [0,0,-1,1], [-1,2,1,0]];
+            // examplecone = [[0,1,0,0,1,1,1,0], [0,0,0,1,1,0,2,2], [0,0,1,0,1,-1,1,0], [0,0,0,1,1,0,1,1], [-1,1,-1,0,1,0,0,0],\n ,[1,1,1,1,1,1,1,1]];   
+            // initiallinearspace = [[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1],,[0,0,0,0,0]];
+            // initiallinearspace = convertmatrixtotext(identitymatrix(4));
+
+            gammaoption = 0;
+            console.log('gammaoption=' + gammaoption)
+            if (gammaoption==0){
+                updateDataandExplanation(gammaoption, examplelinearspace, initiallinearspace)
+            }else{
+                updateDataandExplanation(gammaoption, examplecone, initialcone)
+            }
+            tableall = [];
+            contents = 0;
+            orderNumber=0;
+
+            window.addEventListener('beforeunload', function (event) {
+                // Llama a tu función aquí
+                ejecutarFuncionAntesDeSalir();
+
+                // Establece un mensaje de confirmación para que el usuario confirme la salida
+                const mensaje = "¿Estás seguro de que quieres salir?";
+                event.returnValue = mensaje; // Para algunos navegadores
+                return mensaje; // Para otros navegadores
+            });
+
+            // Definición de variables locales con los valores proporcionados
+            const Subspacecomplement = "1,1,0,1\n 0,1,0,1\n0,0,-1,1\n-1,2,1,0\n";
+            const Invertmatrix = "1,1,0,1\n 0,1,0,1\n0,0,-1,1\n-1,2,1,0\n";
+            const Determinant = "1,1,0,1\n 0,1,0,1\n0,0,-1,1\n-1,2,1,0\n";
+            const Matrixrank = "1,1,0,1\n 0,1,1,1\n1,3,2,3\n2,4,2,4\n";
+            const Updateinverse = "1,1,0,1\n 0,1,0,1\n1,2,0,3\n-1,2,1,0\n";
+            const Vectorinspace = "1,0,0,-1\n 0,0,-1,1\n";
+            const Subspaceintersection = "1,0,-1,0,1\n 0,1,1,1,1\n1,-1,-2,-1,0\n0,0,1,1,0\n";
+            const Homogeneousequalitysystem = "0,1,-1,2\n 1,1,1,0\n1,2,0,1\n1,1,0,1\n";
+            const Completeequalitysystem = "0,1,-1,2,-1\n1,1,1,0,0\n1,2,0,1,-1\n1,1,0,1,0\n";
+            const Systemequalitycompatibility = "1,1,0\n-1,0,1\n-1,1,2\n";
+            const Dualcone = "0,1,0,0,1,1,1,0\n0,0,0,1,1,0,2,2\n0,0,1,0,1,-1,1,0\n0,0,0,1,1,0,1,1\n-1,1,-1,0,1,0,0,0\n\n1,1,1,1,1,1,1,1";
+            const Dualconestandardform = "0,0,0,1,1,1,1,0\n1,0,1,1,0,1,0,0\n1,0,0,0,1,1,-1,1\n1,0,1,1,0,1,1,0\n0,-1,0,1,1,1,0,-1\n\n0,0,1,1,1,1,1,1";
+            const Vectorincone = "0,1,1,0\n0,1,0,1\n0,1,0,0\n0,1,1,-1\n-1,1,0,1\n\n1,1,1,1";
+            const Coneintersection1 = "1,0,2,0\n0,1,2,0\n0,0,1,1\n0,0,1,1\n\n0,0,1,1";
+            const Coneintersection2 = "1,0,1,1\n1,0,1,2\n0,0,1,0\n0,1,1,1\n\n0,0,1,1";
+            const Homogeneousinequalitysystem = "0,1,1,1\n1,1,2,1\n-1,1,0,1\n2,0,1,1\n\n1,1,1,1";
+            const Completeinequalitysystem = "-2,-1,2,-3,-1\n2,-1,-2,1,3\n0,0,0,-1,0\n1,0,-1,0,1\n2,1,-2,-1,3\n\n1,1,1,1,1";
+            const Systeminequalitycompatibility = "1,1,0,-1,-2\n0,1,-1,1,-1\n2,-1,1,0,-1\n0,1,1,1,-1\n\n1,1,1,1,1";
+
+            function changeAlgorithm() {
+                // La función changeAlgorithm alterna el valor de una variable global llamada gammaoption entre 0 y 1.
+                // Dependiendo del valor de gammaoption, se actualizan los datos y explicaciones visualizadas en la interfaz.
+                // También reinicia tablas y matrices de datos para reflejar el cambio de algoritmo.
+
+                // Oculta un elemento específico en la interfaz.
+                document.getElementById('SEquationsid').style.display = 'none';
+                
+                // Cambia el valor de gammaoption entre 0 y 1.
+                gammaoption = 1 - gammaoption;
+                console.log('gammaoption=' + gammaoption);
+                
+                // Dependiendo del valor de gammaoption, actualiza los datos con un conjunto diferente de ejemplos.
+                if (gammaoption == 0) {
+                    updateDataandExplanation(gammaoption, examplelinearspace, initiallinearspace);
+                } else {
+                    updateDataandExplanation(gammaoption, examplecone, initialcone);
+                }
+                
+                // Elimina cualquier tabla visible actualmente.
+                EraseTables();
+                
+                // Inicializa las matrices de datos necesarias para el nuevo algoritmo.
+                initializedatamatrices();
+                //updateficherodatos(); // Esta línea está comentada, pero se podría utilizar para actualizar archivos de datos.
+            }
+
+            function EraseTables(){
+                document.getElementById('tablas').innerHTML='';
+            }
+            function initializedatamatrices(){
+                AA = [];// Variable para almacenar la matriz
+                AA1 = []; // Variable para almacenar la matriz
+                tt = '';// text variable para almacenar la matriz identidad
+                matrixtype=0 // Data Matrix atrixtype=1 Initial matrix
+                vectortype = []; // Variable para almacenar el vector
+                // systemequations=false;
+                systemeq()
+                listaficherosgenerados='';
+                
+            }
+            // Función para mostrar el resultado basado en la opción seleccionada
+            function mostrarResultado() {
+                // Oculta el elemento de ecuaciones del sistema
+                document.getElementById('SEquationsid').style.display = 'none';
+                
+                // Después de un pequeño retraso, ejecuta el siguiente bloque
+                setTimeout(() => {
+                    // Obtiene el valor seleccionado en el menú desplegable
+                    const menu = document.getElementById("menu");
+                    const seleccion = menu.value;
+                    ficherodatos = seleccion;
+
+                    // Determina el índice de la opción seleccionada en el menú
+                    orderNumber = menu.selectedIndex;
+
+                    // Establece una opción de gamma basada en el índice de la selección
+                    newgammaoption = orderNumber <= 10 ? 0 : 1;
+
+                    // Define si es un sistema de ecuaciones
+                    systemequations = (orderNumber == 9 || orderNumber == 18) ? true : false;
+                    systemeq();
+                    console.log('systemequations=' + systemequations);
+
+                    // Trata de evaluar la opción seleccionada y obtener su valor
+                    let contents;
+                    try {
+                        contents = eval(seleccion); // Evalúa la selección como código
+                    } catch (error) {
+                        console.error('Error al evaluar la selección:', error);
+                        contents = '';
+                    }
+
+                    // Reinicia el tipo de matriz
+                    matrixtype = 0;
+
+                    // Si cambia la opción de gamma, se actualiza el algoritmo
+                    if (newgammaoption !== gammaoption) {
+                        document.getElementById("ChangeAlgid").click();
+                    }
+
+                    // Procesa la matriz y el vector
+                    [AAA, vectortype] = processMatrixAndVector1(contents);
+
+                    // Si es un sistema de ecuaciones, convierte la matriz
+                    if (systemequations) {
+                        AAA = converttoequation(AAA, gammaoption);
+
+                        // Si gammaoption está activado, formatea la matriz y el vector
+                        if (gammaoption) {
+                            tm = matrixtotextmatrix(AAA);
+                            tv = vectortotextvector(vectortype);
+                            contents = tm + '\n' + tv;
+                        } else {
+                            AAA = transposeMatrix(AAA);
+                            tm = matrixtotextmatrix(AAA);
+                            contents = tm;
+                        }
+                    }
+
+                    // Muestra el contenido de la matriz en el elemento HTML
+                    document.getElementById('input-matrix').innerHTML = contents;
+
+                    // Inicializa la matriz inicial
+                    [AA1, tt] = InitializeInitialmatrix();
+
+                    // Actualiza los datos y la explicación visual en base a gammaoption y los contenidos procesados
+                    updateDataandExplanation(gammaoption, contents, tt);
+                }, 0);
+            }
+            function ejecutarFuncionAntesDeSalir() {
+                // Aquí va el código que quieres ejecutar antes de salir
+                updateficherodatos();
+                console.log("El usuario está intentando salir de la aplicación.");
+                // Puedes realizar otras acciones como guardar datos, cancelar operaciones, etc.
+            }
+
+
+            function readOneFile(f, target) {
+                // La función readOneFile es responsable de leer un archivo seleccionado y procesar su contenido según el valor de 'target'.
+                // Dependiendo de si 'target' es 'M' o 'M1', llama a una función para procesar la matriz o vector dentro del archivo.
+                // Si no se puede leer el archivo, muestra una alerta.
+
+                if (f) {
+                    var r = new FileReader(); // Crea un nuevo lector de archivos.
+                    
+                    // Define lo que sucede cuando el archivo ha sido leído correctamente.
+                    r.onload = function(e) {
+                        var contents = e.target.result; // Obtiene el contenido del archivo.
+                        
+                        // Procesa el contenido del archivo dependiendo del valor de 'target'.
+                        if (target === 'M') {
+                            processMatrixAndVector(contents, 'M');
+                        } else if (target === 'M1') {
+                            processMatrixAndVector(contents, 'M1');
+                        }
+                        
+                        return contents; // Devuelve el contenido leído.
+                    };
+                    
+                    // Inicia la lectura del archivo como texto.
+                    r.readAsText(f);
+                } else {
+                    // Si no se puede leer el archivo, muestra una alerta.
+                    alert("No se pudo leer el archivo.");
+                }
+                
+                return contents; // Devuelve el contenido, aunque en este contexto no siempre será accesible fuera de onload.
+            }
+
+            /**
+            function processSelectedFiles2(evt, target) {
+                var files = evt.target.files;
+                if (files.length > 0) {
+                    contents=readOneFile(files[0], target);
+                }
+                return contents
+            }
+            **/
+
+            function processMatrixAndVector(text, target) {
+                // La función processMatrixAndVector toma un texto que representa una matriz y un vector, los procesa y los almacena en variables globales.
+                // El texto se espera que contenga una serie de filas de números separados por comas, donde la parte inicial representa una matriz
+                // y una vez que encuentra una línea en blanco, lo que sigue se trata como un vector.
+                // Dependiendo del valor del parámetro 'target', los datos procesados se asignan a diferentes variables globales ('M' y 's' o 'M1' y 's1').
+
+                // Divide el texto en líneas, eliminando espacios en blanco innecesarios.
+                var lines = text.trim().split(/\r?\n/); 
+                let matrix = [], vector = [];
+                var isVectorSection = false; // Esta variable indica si se ha encontrado la sección del vector.
+
+                // Recorre cada línea del archivo de texto.
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i].trim(); // Elimina espacios en blanco en los extremos de cada línea.
+
+                    // Si la línea está vacía, esto indica que la siguiente línea es parte del vector.
+                    if (line === '') {
+                        isVectorSection = true; // Cambia a la sección del vector.
+                        continue; // Pasa a la siguiente iteración sin procesar la línea vacía.
+                    }
+
+                    // Si estamos en la sección del vector (después de la línea en blanco).
+                    if (isVectorSection) {
+                        // Convierte la línea del vector en un array de números flotantes.
+                        vector = line.split(',').map(num => parseFloat(num.trim())); 
+                        break; // Sale del bucle ya que el vector es una única fila.
+                    } else {
+                        // Si aún estamos en la sección de la matriz, convierte la línea en una fila de la matriz.
+                        var row = line.split(',').map(num => parseFloat(num.trim()));
+                        matrix.push(row); // Añade la fila a la matriz.
+                    }
+                }
+
+                // Si el target es 'M', almacena la matriz en 'M' y el vector en 's'.
+                if (target === 'M') {
+                    M = matrix;
+                    s = vector;
+                    // Se podría llamar a una función para mostrar la matriz y el vector, pero está comentada.
+                    // displayMatrixAndVector(M, s, 'matrix-output-1', 'vector-output-1');
+                } 
+                // Si el target es 'M1', almacena la matriz en 'M1' y el vector en 's1'.
+                else if (target === 'M1') {
+                    M1 = matrix;
+                    s1 = vector;
+                    // displayMatrixAndVector(M1, s1, 'matrix-output-2', 'vector-output-2');
+                }
+            }
+
+           
+            function updateLabel(input, labelId) {
+                const label = document.getElementById(labelId);
+                if (input.files.length > 0) {
+                    label.textContent = ''; 
+                } else {
+                    label.textContent = "Arrastrar archivo aquí";
+                }
+            }
+            /**
+            function setupDragAndDrop(dropAreaId, inputId, labelId) {
+                const dropArea = document.getElementById(dropAreaId);
+                const input = document.getElementById(inputId);
+
+                input.addEventListener('change', () => updateLabel(input, labelId));
+
+                dropArea.addEventListener('dragover', function(event) {
+                    event.preventDefault();
+                    dropArea.classList.add('dragging');
+                });
+
+                dropArea.addEventListener('dragleave', function() {
+                    dropArea.classList.remove('dragging');
+                });
+
+                dropArea.addEventListener('drop', function(event) {
+                    event.preventDefault();
+                    dropArea.classList.remove('dragging');
+
+                    if (event.dataTransfer.files.length > 0) {
+                        input.files = event.dataTransfer.files;
+                        updateLabel(input, labelId);
+                        if(inputId === 'file-input-1'){
+                            processSelectedFiles({target: input}, inputId === 'file-input-1' ? 'M' : 'M1');
+                        }else{
+                            processSelectedFiles1({target: input}, inputId === 'file-input-2' ? 'M' : 'M1');
+                        }
+                    }
+                });
+
+                updateLabel(input, labelId);
+            }
+            **/
+
+            // Example usage:
+            // var matrix = [
+            //     [0.12345, 0.6789, 0.9876],
+            //    [0.54321, 0.0987, 0.6543]
+            // ];
+            // var filename = 'matrix.txt';
+            // writeMatrixToFile(matrix, 6, filename, false);
+
+            // Función para manejar el botón "Sistema de Ecuaciones"
+            function systemeq() {
+                console.log("Botón 'Sistema de Ecuaciones' pulsado");
+                
+                // Mostrar el texto del botón según el valor de systemequations
+                const button = document.getElementById("systemEqButton");
+                console.log('systemequations=' + systemequations)
+                if (systemequations) {
+                    button.textContent = "Equation problem";
+                } else {
+                    button.textContent = "No Equation Problem";
+                }
+            }  
+
+            function systemeq1() {
+                // Actualiza systemequations y cAmbia el nombre del botón
+                console.log("Botón 'Sistema de Ecuaciones' pulsado");
+                systemequations=!systemequations;
+                systemeq();
+            }
+
+            function dividirColumnasPorUltimoElementoPositivo(matriz) {
+                // Obtener el número de filas y columnas
+                let numFilas = matriz.length;
+                let numColumnas = matriz[0].length;
+
+                // Crear una nueva matriz de ceros con las mismas dimensiones
+                let matriz_dividida = matriz;
+
+                // Dividir cada elemento de cada columna por el último elemento de esa columna si positivo
+                for (let col = 0; col < numColumnas; col++) {
+                    let ultimoElemento = matriz[numFilas - 1][col];
+                    if (ultimoElemento>0){
+                        for (let fila = 0; fila < numFilas; fila++) {
+                            matriz_dividida[fila][col] = matriz[fila][col] / ultimoElemento;
+                        }
+                    }
+                }
+                console.log(iter + " Matriz original matriz: " + matriz);
+                console.log(iter + " matriz_dividida: " + matriz_dividida);
+                return matriz_dividida;
+            }
+
+            // Función para extraer submatrices y transponerlas
+            function extractAndTransposeSubmatrices(B, Wcolumns) {
+                // Inicializar las submatrices
+                let espacio = [];
+                let cono = [];
+                let politopo = [];
+
+                // Obtener el número de filas y columnas
+                let numFilas = B.length;
+                let numColumnas = B[0].length;
+
+                // Recorrer cada columna de la matriz B
+                for (let col = 0; col < numColumnas; col++) {
+                    let ultimoElemento = B[numFilas - 1][col];
+                    let wValor = Wcolumns[col];
+                    
+                    if (ultimoElemento === 0) {
+                        if (wValor === 0) {
+                            // Agregar columna a la submatriz 'espacio'
+                            espacio.push(B.map(row => row[col]));
+                        } else if (wValor === 1) {
+                            // Agregar columna a la submatriz 'cono'
+                            cono.push(B.map(row => row[col]));
+                        }
+                    } else if (ultimoElemento === 1) {
+                        // Agregar columna a la submatriz 'politopo'
+                        politopo.push(B.map(row => row[col]));
+                    }
+                }
+                if(espacio.length>0){
+                    espacio = transposeMatrix(espacio)
+                    espacio=removeLastRow(espacio)
+                }   
+                if(cono.length>0){
+                    cono = transposeMatrix(cono)
+                    cono=removeLastRow(cono)
+                }
+                if(politopo.length>0){
+                    politopo = transposeMatrix(politopo)
+                    politopo=removeLastRow(politopo)
+
+                }
+                // Mostrar las submatrices
+                console.log("Matriz 'espacio':");
+                console.log(espacio);
+
+                console.log("Matriz 'cono':");
+                console.log(cono);
+
+                console.log("Matriz 'politopo':");
+                console.log(politopo);
+
+                return {espacio, cono, politopo}
+            }
+
+
+            // Función para transponer una matriz
+            function transposeMatrix(matrix) {
+                return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
+            }
+            /**
+            function procesarMatrices(contents) {
+                // Dividir el contenido por líneas
+                const lines = contents.trim().split('\n');
+
+                // Definir el separador basado en la primera línea
+                const separator = lines[0].includes(',') ? ',' :
+                                    lines[0].includes(' ') ? ' ' :
+                                    lines[0].includes('\t') ? '\t':
+                                    '\\';
+
+                // Función para convertir una línea en un array numérico
+                const parseLine = (line) => line.trim().split(separator).map(Number);
+
+                // Inicializar las matrices
+                let matrix1 = [];
+                let matrix2 = [];
+
+                // Bandera para determinar qué matriz está siendo leída
+                let readingMatrix1 = true;
+
+                // Iterar sobre cada línea
+                for (const line of lines) {
+                    // Saltar las líneas vacías
+                    if (line.trim() === '') {
+                    readingMatrix1 = false;
+                    continue;
+                    }
+
+                    // Convertir la línea en un array numérico
+                    const array = parseLine(line);
+
+                    // Agregar el array a la matriz correspondiente
+                    if (readingMatrix1) {
+                    matrix1.push(array);
+                    } else {
+                    matrix2.push(array);
+                    }
+                }
+
+                // Insertar el contenido original en el div correspondiente
+                document.getElementById('contents').innerText = contents;
+
+                // Insertar las matrices en el div correspondiente
+                document.getElementById('matrices').innerHTML = `
+                    <p>Matriz 1:</p>
+                    <pre>${matrix1.map(row => row.join('\t')).join('\n')}</pre>
+                    <p>Matriz 2:</p>
+                    <pre>${matrix2.map(row => row.join('\t')).join('\n')}</pre>
+                `;
+
+                // Devolver las matrices en un array
+                return [matrix1, matrix2];
+            }
+            **/
+            // Función para actualizar la variable de precisión cuando cambia el valor en el campo de entrada
+            function updatePrecision() {
+                // Obtén el valor del campo de entrada
+                var precisionInput = document.getElementById("precisionInput").value;
+
+                // Actualiza la variable de precisión con el nuevo valor
+                precisionval = parseFloat(precisionInput);
+
+                // Muestra la variable de precisión en la consola (puedes eliminar esto en la versión final)
+                console.log("La precisión ha sido actualizada a: " + precisionval);
+            }
+
+            // Función para actualizar la variable de digits cuando cambia el valor en el campo de entrada
+        /**    function updatedigits() {
+                // Obtén el valor del campo de entrada
+                var digitsInput= document.getElementById("precisionInput").value;
+
+                // Actualiza la variable de digits con el nuevo valor
+                var digits= parseFloat(digitsInput);
+
+                // Muestra la variable de precisión en la consola (puedes eliminar esto en la versión final)
+                console.log("digits ha sido actualizada a: " + digits);
+            }
+            **/
+           /**
+            function unique(x) {
+                return x.filter(function(elem, index) { return x.indexOf(elem) === index; });
+            }
+            **/
+
+            function removeLastRow(A) {
+                if (A.length === 0) {
+                    return A; // Si la matriz está vacía, simplemente la devolvemos
+                }
+                return A.slice(0, -1); // Devolvemos una nueva matriz sin la última fila
+            }
+
+            function removeLastColumn(A) {
+                return A.map(row => row.slice(0, -1));
+}
+
+            function arrayColumn(arr, n) {
+                return arr.map(x => x[n]);
+            }
+
+            function updateficherodatos() {
+                if (listaficherosgenerados !== '') {
+                    let message = 'Con el fichero de datos ' + ficherodatos + ' se han generado los siguientes ficheros y han sido enviados a su carpeta de descarga. Recupérelos allí:\n' + listaficherosgenerados;
+                    console.log(message);
+                    alert(message);
+                }
+                // listaficherosgenerados = '';
+            }
+
+            function executeAlgorithm() {
+                console.log('gammaoption=' + gammaoption)
+                switch(gammaoption) {
+                    case 1:
+                        GammaAlgorithm();
+                        if (systemequations) {
+                            Wcolumns1 = Wcolumns;
+                            console.log("Wcolumns: " + Wcolumns);
+                            ////++////BB=B
+                            const datos = extractAndTransposeSubmatrices(B, Wcolumns1);
+
+                            writeMatrixToFile(datos.espacio, digits, 'espacio.txt', 0);
+                            writeMatrixToFile(datos.cono, digits, 'cono.txt', 1);
+                            writeMatrixToFile(datos.politopo, digits, 'politopo.txt', 1);
+                        }
+                    break;
+                    case 0:
+                        JubeteAlgorithm();
+                        if (systemequations) {
+                            //writeMatrixToFile(datos.espacio, digits, 'espacio.txt', 0);
+                            // writeMatrixToFile(datos.politopo, digits, 'politopo.txt', 1);
+                        }
+                    break;
+                    default:
+                }
+            }
+
+
+            function updateDataandExplanation(gammaoption, datmatrix, datinitialmatrix) {
+                if (gammaoption) {
+                    document.getElementById('Algorithm').innerHTML = "<strong>Dual cone Algorithm<strong>";
+                    document.getElementById('explanation').innerHTML = explamationmessage2;
+                    document.getElementById('input-matrix').innerHTML = datmatrix;
+                    document.getElementById('input-matrix1').innerHTML = datinitialmatrix;
+                } else {
+                    document.getElementById('Algorithm').innerHTML = "<strong>Orthogonalization Algorithm<strong>";
+                    document.getElementById('explanation').innerHTML = explamationmessage1;
+                    document.getElementById('input-matrix').innerHTML = datmatrix;
+                    document.getElementById('input-matrix1').innerHTML = datinitialmatrix;
+                }
+            }
+            /**
+            function clearInpTextbox(el) {
+                el.value = '';
+                selectAllInpTextbox(el); // asi hace foco
+            }
+            **/
+            function selectAllInpTextbox(el) {
+                el.select();
+            }
+
+            function clearOutTextbox(id1,id2) {
+                document.getElementById(id1).innerHTML ='';
+                document.getElementById(id2).innerHTML ='';
+                EraseTables();
+                //selectAllOutTextbox(id1); // asi hace foco
+            }
+
+            function selectAllOutTextbox(el) {
+                el.select();
+            }
+
+            function debug(str) {
+                console.log(str);
+            };
+            /**
+            function toggleFormat0() {
+                isLatexFormat = !isLatexFormat;
+                var button = document.getElementById('toggle-format');
+                button.innerText = isLatexFormat ? 'Cambiar a formato de texto' : 'Cambiar a LaTeX';
+                    
+                // Vuelve a mostrar la matriz en el nuevo formato
+                var matrixOutput = document.getElementById('matrix-output').innerHTML;
+                var vectorOutput = document.getElementById('vector-output').innerHTML;
+                processMatrixAndVector(document.getElementById('input-matrix').innerHTML);
+            }
+            **/
+            function InitializeInitialmatrix() {
+                // Obtener la matriz de datos desde el input del DOM
+                datamatrix = document.getElementById('input-matrix').value;
+                A = parse_matrix(datamatrix);
+                tt = '';
+
+                // Selección de la opción de gamma y creación de la matriz correspondiente
+                switch (gammaoption) {
+                    case 0:
+                        let n = A[0].length;
+                        tt = identitymatrixtext(n);
+                        break;
+                    case 1:
+                        let m = A.length - 1;
+                        tt = createConeInitialMatrix(m);
+                        break;
+                    default:
+                        break;
+                }
+
+                // Actualización de elementos en el DOM
+                // document.getElementById('list1').value = '';
+                // document.getElementById('list1').innerHTML = '';
+                document.getElementById('input-matrix1').value = tt;
+
+                // Mensaje de depuración
+                debug('contenido despues=' + document.getElementById('input-matrix1').value);
+
+                // Borrar las tablas
+                EraseTables();
+
+                // Retornar la matriz y el texto de la matriz identidad
+                return [datamatrix, tt];
+            }
+        function createConeInitialMatrix(n) {
+            var BB = identitymatrix(n);
+            var nn = n + 2;
+            tt='';
+            for (var i = 0; i < nn; i ++) {
+                for (var j = 0; j < n; j ++) {
+                if(j==n-1){aux='\n'}else{aux=','}
+                    if (i == n && j==0) {
+                        tt=tt + '\n';
+                    }else if (i == n && j!=0) {
+                        tt=tt;
+                    } else if (i == n + 1) {
+                        tt=tt + '0' + aux;
+                    } else {
+                    console.log('i=' + i + ' j=' + j)
+                        tt = tt + BB[i][j].toString()+aux;
+                    }
+                }
+            }
+            return tt;
+        }
+        /**
+        function createConeInitialMatrix1(n) {
+            var BB = identitymatrix(n);
+            var nn = n + 2;
+            var B = creatematrix(nn, n, 0);
+            for (var i = 0; i < nn; i ++) {
+                for (var j = 0; j < n; j ++) {
+                    if (i == n) {
+                        B[i][j] = '';
+                    } else if (i == n + 1) {
+                        B[i][j] = 0;
+                    } else {
+                        B[i][j] = BB[i][j];
+                    }
+                }
+            }
+            var tt = convertmatrixtotext(B);
+            return tt;
+        }
+        **/
+       /**
+        function putcontent(files, loc) {
+            var f = files[0];
+            contents = 	(f);
+            debug('Mete en ' + loc + ': ' + contents);
+            document.getElementById(loc).innerHTML = contents;
+        }
+        **/
+
+        function processSelectedFiles(evt) {
+            var files = evt.target.files;
+            displaylist(files, 'list');
+            var f = files[0];
+            fname=f.name;
+            //updateficherodatos();
+            ficherodatos=fname;
+            contents=readOneFile(f, 'input-matrix');
+            InitializeInitialmatrix();
+        }
+
+        function processSelectedFiles1(evt) {
+            var files = evt.target.files;
+            // displaylist(files, 'list1');
+            var f = files[0];
+            f1name=f.name;
+            //updateficherodatos();
+            ficherodatos=f1name;
+            contents=readOneFile(f, 'input-matrix1');
+            InitializeInitialmatrix();
+        }
+        /* Reads one file and returns its content */
+        /*
+        function readOneFile(f, loc, option) {
+            if (f) {
+                var r = new FileReader();
+                contents = 'empty';
+                r.onload = function(e) {
+                    contents = e.target.result;
+                    // alert( "File loaded:" + f.name + "\n"); 
+                    debug('1 readOneFile: ' + contents);
+                    processMatrixAndVector1(contents);
+                }
+                r.readAsText(f);
+                contents = r.result;
+                debug('2 readOneFile: ' + contents);
+            } else {
+                alert("Failed");
+            }
+            setTimeout(function() {
+                document.getElementById(loc).innerHTML = contents;
+                debug('readOneFile returns: ' + contents);
+                return contents;
+            }, 400);
+        }
+        */
+
+        function processMatrixAndVector1(text) {
+                // Entra con fichero de Data matrix y separa la matriz del vector de tipos y devuelve ambos
+                /*
+            let matrixoutput, vectoroutput;
+            if (matrixtype === 0) {
+                matrixoutput = "matrix-output-1";
+                vectoroutput = "vector-output-1";
+            } else {
+                matrixoutput = "matrix-output-2";
+                vectoroutput = "vector-output-2";
+            }
+                */
+
+            const lines = text.trim().split(/\r?\n/);
+            AA = [];
+            vectortype = [];
+            let isVectorSection = false;
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+
+                if (line === '') {
+                    isVectorSection = true; // La siguiente línea será el vector si está después de una línea en blanco
+                    continue;
+                }
+
+                if (isVectorSection) {
+                    vectortype = line.split(',').map(num => parseFloat(num.trim()));
+                    break; // Solo esperamos un vector, así que podemos salir del bucle
+                } else {
+                    const row = line.split(',').map(num => parseFloat(num.trim()));
+                    AA.push(row);
+                }
+            }
+
+            // displayMatrixAndVector(AA, vectortype, matrixoutput, vectoroutput);
+            console.debug('Matrix:', AA);
+            console.debug('Vector:', vectortype);
+            return [AA, vectortype ];
+        }
+
+        function makeTable(array) {
+            var table = document.createElement('table');
+            for (var ii = 0; ii < array.length; ii++) {
+                var row = document.createElement('tr');
+                for (var jj = 0; jj < array[i].length; jj++) {
+                    var cell = document.createElement('td');
+                    cell.textContent = array[ii][jj];
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+            return table;
+        }
+        /**
+        function displaylist1(files, loc) {
+            var output = [];
+            for (var ii = 0, f; f = files[ii]; ii++) {
+                output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes, last modified: ',
+                    f.lastModifiedDate.toLocaleDateString(), '</li>');
+            }
+            document.getElementById(loc).innerHTML = '<ul>' + output.join('') + '</ul>';
+        }
+        **/Completeequalitysystem
+
+        function displaylist(files, loc) {
+            var output = [];
+            for (var ii = 0, f; f = files[ii]; ii++) {
+                output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                    f.size, ' bytes');
+
+                if (f.lastModifiedDate) {
+                    output.push(', last modified: ', f.lastModifiedDate.toLocaleDateString());
+                } else {
+                    output.push(', last modified date not available');
+                }
+
+                output.push('</li>');
+            }
+            document.getElementById(loc).innerHTML = '<ul>' + output.join('') + '</ul>';
+        }
+        // dropZones(drop-zone, 'file-input-1')
+        // dropZones1(drop-zone1,'file-input-2')
+
+        function dropZones(dropz,inputmatrixname){
+            // Funcionalidad de arrastrar y soltar
+            const dropZone = document.getElementById('dropz');
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '#e9e9e9';
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.style.backgroundColor = '#fff';
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '#fff';
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    contents=readOneFile(files[0], inputmatrixname);
+                    InitializeInitialmatrix();
+                }
+            });
+
+        }
+
+        function dropZones1(dropz,inputmatrixname){
+            // Funcionalidad de arrastrar y soltar
+            const dropZone1 = document.getElementById('dropz');
+
+            dropZone1.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '#e9e9e9';
+            });
+
+            dropZone1.addEventListener('dragleave', () => {
+                dropZone.style.backgroundColor = '#fff';
+            });
+
+            dropZone1.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.style.backgroundColor = '#fff';
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    contents=readOneFile(files[0], inputmatrixname);
+                    InitializeInitialmatrix();
+                }
+            });
+
+        }
+        
+        // Setup the dnd listeners.
+        /*
+        var dropZone = document.getElementById('drop_zone');
+        dropZone.addEventListener('dragover', handleDragOver, false);
+        dropZone.addEventListener('drop', handleDragFileSelect, false);
+        var dropZone1 = document.getElementById('drop_zone1');
+        dropZone1.addEventListener('dragover', handleDragOver, false);
+        dropZone1.addEventListener('drop', handleDragFileSelect1, false);
+        /* FIN File selection by dragging */
+        function parse_matrix(text) {
+            // Normaliza el texto de entrada, reemplazando diferentes caracteres y formatos
+            text = text.trim();
+            text = text.replace(/\r|\n/g, '\n').replace(/\n+/g, '\n');
+            text = text.replace(/,|;|\||\t| /g, ' ').replace(/ /g, ' ');
+
+            // Divide el texto en filas
+            var textRows = text.split('\n');
+            var M = [];
+            var ii, il = textRows.length;
+
+            // Itera por cada fila de texto y convierte los elementos a números
+            for (var ii = 0; ii < il; ii++) {
+                M.push([]);
+                var cols = textRows[ii].trim().split(' ');
+                var jl = cols.length;
+
+                // Convierte cada elemento de la fila en un número y lo añade a la matriz
+                for (var jj = 0; jj < jl; jj++) {
+                    M[ii].push(parseFloat(cols[jj]));
+                }
+            }
+            return M; // Devuelve la matriz resultante
+        }
+
+        function removeElement(id) {
+            var elem = document.getElementById(id);
+            return elem.parentNode.removeChild(elem);
+        }
+
+        function convertmatrixtotext(B) {
+            var text = [];
+            var n = B.length;
+            var m = B[0].length;
+            for (var ii = 0; ii < n; ii ++) {
+                for (var jj = 0; jj < m; jj ++) {
+                    if (isNaN(B[ii][jj])) {
+                        text = text + ' ' + B[ii][jj];
+                    } else {
+                        text = text + ' ' + B[ii][jj].toString();
+                    }
+                }
+                text = text + '\n';
+            }
+            return text;
+        }
+
+        function print_matrix(M) {
+            if (!M) {
+                return 'print matrix Failed';
+            }
+            var nRows = M.length;
+            var i;
+            var text = '';
+            for (var ii = 0; ii < nRows; ii ++) {
+                text += '<tr><td>' + M[ii].join('</td><td>') + '</td></tr>\n';
+            }
+            return text;
+        }
+        /* FIN Example reading a matrix from web page */
+        /* ALGORITMO ORTOGONALIZACION */
+        function createvector(rows, defaultvalue) {
+            var a = [];
+            for (var ii = 0; ii < rows; ii ++) {
+                a.push(defaultvalue);
+            }
+            return a;
+        }
+
+        function creatematrix(rows, cols, defaultvalue) {
+            var arr = [];
+            // Creates all lines:
+            if (isNaN(defaultvalue)) {
+                var def = defaultvalue
+            } else {
+                def = Number(defaultvalue);
+            }
+            for (var ii = 0; ii < rows; ii++) {
+                // Creates an empty line
+                arr.push([]);
+                // Adds cols to the empty line:
+                arr[ii].push(new Array(cols));
+                for (var jj = 0; jj < cols; jj++) {
+                    if (defaultvalue === 'empty') {
+                        arr[ii].pop();
+                    } else {
+                        // Initializes:
+                        arr[ii][jj] = def;
+                    }
+                }
+            }
+            return arr;
+        }
+        /*
+        function zeros(dimensions) {
+            var array = [];
+            for (var ii = 0; ii < dimensions[0]; ++ii) {
+                array.push(dimensions.length == 1 ? 0 : zeros(dimensions.slice(1)));
+            }
+            return array;
+        }
+        function ones(dimensions) {
+            var array = [];
+            for (var ii = 0; ii < dimensions[0]; ++ii) {
+                array.push(dimensions.length == 1 ? 1 : ones(dimensions.slice(1)));
+            }
+            return array;
+        }
+        */
+        function identitymatrix(n) {
+            I = creatematrix(n, n, 0);
+            for (var ii = 0; ii < n; ++ii) {
+                I[ii][ii] = 1;
+            }
+            return I;
+        }
+
+        function identitymatrixtext(n) {
+            tt = [];
+            for (var ii = 0; ii < n; ++ii) {
+                for (var jj = 0; jj < n; ++jj) {
+                    if (ii == jj) {
+                        tt = tt + '1 ';
+                    } else {
+                        tt = tt + '0 ';
+                    }
+                }
+                tt = tt + '\n';
+            }
+            return tt;
+        }
+
+    /*
+
+        function intersection(listA, listB) {
+            var result = listA.filter(itemA => {
+                return listB.some(itemB => itemB === itemA);
+            });
+            return result;
+        }
+
+        function intersection(A, B) {
+            var result = A.filter(sA => {
+                return B.some(sB => sB === sA);
+            });
+        }
+    */
+        /**
+        function isempty(difset){
+            return difset==[];
+        }	
+        **/
+        function checkpos(x) {
+        var set=[];
+        for(var i=0;i<x.length;i++){
+            if(x[i]>0){set.push(i)}
+        }
+        return set;
+        }
+
+        function checkneg(x) {
+            var set=[];
+            for(var ii=0;ii<x.length;ii++){
+                if(x[ii]<0){set.push(ii)}
+            }
+            return set;
+        }
+        function checknull(x) {
+            var set=[];
+            for(var ii=0;ii<x.length;ii++){
+                if(x[ii]==0){set.push(ii)}
+            }
+            return set;
+        }
+        function checkvalid(x,a) {
+            var set=[];
+            for(var ii=0;ii<x.length;ii++){
+                if(x[ii]==0 && a[ii]>0){set.push(ii)}
+            }
+            return set;
+        }
+
+        function checksel(x) {
+            var set=[];
+            for(var ii=0;ii<x.length;ii++){
+                if(x[ii]<=0){set.push(ii)}
+            }
+            return set;
+        }
+
+        function submatrix(A, columnlist) {
+            var m = A.length;
+            var n = A[0].length;
+            var nc = columnlist.length;
+            var B = creatematrix(m, nc, 0);
+            for (var ii = 0; ii < m; ii++) {
+                for (jj = 0; jj < nc; jj++) {
+                    B[ii][jj] = A[ii][columnlist[jj]];
+                }
+            }
+            return B;
+        }
+        /**
+        function subarray(A, columnlist){
+            var m = A.length;
+                var nc = columnlist.length;
+                var C = creatematrix(nc, 1,[]);
+                        for (var jj = 0; jj < nc; jj++) {
+                            C[jj].push(A[columnlist[jj]]);
+                        }
+                return C;
+        }
+        **/
+
+        function subvector(A, elementlist){
+            var m = elementlist.length;
+                var C = createvector(m, 0);
+                for (var ii = 0; ii < m; ii++) {
+                        C[ii]=A[elementlist[ii]];
+                }
+            return C;
+        }
+
+        function difference(A, B, size) {
+            var hashtable = createvector(size, 0);
+            for (var ss = 0; ss < B.length; ss++) {
+                hashtable[B[ss]] = 1;
+            }
+            var dif = [];
+            for (var ss = 0; ss < A.length; ss++) {
+                if (hashtable[A[ss]] !== 1) {
+                    dif.push(A[ss]);
+                }
+            }
+            return dif;
+        }
+        /**
+        function union(A, B, size) {
+            var hashtable = createvector(size, 0);
+            for (var ss = 0; ss < B.length; ss++) {
+                hashtable[B[ss]] = 1;
+            }
+            for (var ss = 0; ss < A.length; ss++) {
+                hashtable[A[ss]] = 1;
+            }
+            var uni = [];
+            for (var ss = 0; ss < size; ss++) {
+                if (hastable[ss] == 1) {
+                    uni.push(ss);
+                }
+            }
+            return uni;
+        }
+        **/
+
+    function intersection(A, B, size) {
+            var hashtable = createvector(size, 0);
+            for (var ss = 0; ss < A.length; ss++) {
+                hashtable[A[ss]] = 1;
+            }
+            var inter = [];
+            for (var ss = 0; ss < B.length; ss++) {
+                if (hashtable [B[ss]] == 1) {
+                    inter.push(B[ss]);
+                }
+            }
+            return inter;
+        }
+
+        function isnotzero(dotp, v, B, j){
+            var s=0;
+            for(i=0;i<v.length;i++){
+                s=s+v[i]*v[i];
+            }
+            s=Math.sqrt(s);
+            var s1=0;
+            for(i=0;i<v.length;i++){
+                s1=s1+B[i][j]*B[i][j];
+            }
+            s1=Math.sqrt(s1);
+            ss=Math.abs(dotp/(s*s1))>precisionval;
+            return ss;
+        }
+
+        function lookforunitvalue(){
+            for(i=0;i<DotsP.length;i++){
+                if(Math.abs(Math.abs(DotsP[i])-1)<precisionval && (pivotcandidateset[i]==1)){return i}
+            }
+            return -1;
+        }
+
+        function JubeteAlgorithm() {
+            removeElement('tablas');
+            var div = document.createElement('div');
+            div.setAttribute("id", 'tablas');
+            document.body.appendChild(div);
+            tableall = [];
+            /* Lee los datos de la pagina y los guarda en la matriz A. */
+            datamatrix = document.getElementById('input-matrix').value;
+            var A = parse_matrix(datamatrix);
+            /* Calcula las dimensiones de la matriz A. */
+            m = A.length;
+            if (m==0 || A[0]=='NaN') {
+                alert('Error: Data matrix is not valid');
+                return
+            }
+            n = A[0].length;
+            Usedcolumns = createvector(n, 0);
+            /* Inicia el proceso con B igual a la matriz identidad. */
+            B = identitymatrix(n);
+            initmatrix = document.getElementById('input-matrix1').value;
+            var B = parse_matrix(initmatrix);
+            if (B.length !== n) {
+                alert('Error: Initial matrix is not valid');
+                return
+            }
+            /* Procede a meter las filas de la matriz A, una por una */
+            for (iter = 0; iter < m; iter ++) {
+                /* Elige la fila i-esima y la guarda en la variable vector */
+                vector = A[iter];
+                /* Calcula los productos escalares del vector por los vectores columna */
+                /* de la matriz B. */
+                DotsP = createvector(n, 0);
+                for (k = 0; k < n; k ++) {
+                    for (k1 = 0; k1 < n; k1 ++) {
+                        DotsP[k] = DotsP[k] + vector[k1] * B[k1][k];
+                    }
+                }
+                /* Elige como vector pivote el primero no utilizado y cuyo */
+                /* producto escalar es no nulo */
+                pivotcandidateset = createvector(n, 0);
+                Unusedcolumns = pivotcandidateset;
+                for (k = 0; k < n; k ++) {
+                    if (isnotzero(DotsP[k], vector, B, k) && Usedcolumns[k] == 0) {
+                        pivotcandidateset[k] = 1
+                    }
+                }
+                iii=lookforunitvalue();
+                if(iii!=-1)
+                    pivotcol=iii
+                else
+                pivotcol = pivotcandidateset.indexOf(1);
+                /* Mete el valor del pivote (su producto escalar) en pivotval. */
+                pivotval = DotsP[pivotcol];
+                /* Imprime la tabla. */
+                /*document.getElementById('output').innerHTML = print_matrix(B);*/
+                table = Buildtable(iter, vector, B, Usedcolumns, pivotcol, DotsP);
+                table1=[...table];
+                latex=generateLatexTable(table1, iter);
+                alllatex=alllatex + latex;
+                /*document.getElementById('output').innerHTML = print_matrix(B);*/
+                if (iter > -1) {
+                    caption = 'Iteration ' + (iter + 1);
+                } else {
+                    caption = 'Final Table';
+                }
+                createTable(table, caption, iter + 1, n + 1);
+                /* PrintMatrix(iter,vector,B,Usedcolumns, pivotcol,DotsP);*/
+                /* Transforma la matriz B (Proceso de pivotaje) si el pivote */
+                /* es no nulo. */
+                if (pivotcol >= 0) {
+                    /* Marca la columna como usada */
+                    Usedcolumns[pivotcol] = 1;
+                    /* Transforma la columna pivote dividiendo por pivotval */
+                    for (k = 0; k < n; k ++) {
+                        B[k][pivotcol] = B[k][pivotcol] / pivotval;
+                    }
+                    /* Transforma las columnas no pivote. */
+                    for (j = 0; j < n; j ++) {
+                        if (j != pivotcol) {
+                            for (k = 0; k < n; k ++) {
+                                B[k][j] = B[k][j] - DotsP[j] * B[k][pivotcol];
+                            }
+                        }
+                    }
+                }
+                Wcolumns=Usedcolumns;
+                console.log(Wcolumns)
+            }
+            console.log('FIN')
+            if(systemequations){
+                C = generarMatrizC(B, Wcolumns);
+                encabezado = generarEncabezado(C);
+                mostrarTabla(C, encabezado);
+                document.getElementById('SEquationsid').style.display = 'block';
+            }  
+            /* Imprime la tabla. */
+            /* document.getElementById('output').innerHTML = print_matrix(B);*/
+            iter = -1;
+            pivotcol = -1;
+
+            writeMatrixToFile(B, digits, 'B.txt',0)
+            /* alert(orthogonalset) */
+            writeMatrixToFile(transpose(Wcolumns), digits, 'Wcolumns.txt',1)
+
+
+            table = Buildtable(iter, vector, B, Usedcolumns, pivotcol, DotsP);
+            table1=[...table];
+            latex=generateLatexTable(table1, 9999);
+            alllatex=alllatex + latex;
+            /*document.getElementById('output').innerHTML = print_matrix(B);*/
+            if (iter > -1) {
+                caption = 'Iteration ' + (iter + 1);
+            } else {
+                caption = 'Final Table';
+            }
+            createTable(table, caption, n + 1, n + 1);
+            document.getElementById('tablas').innerHTML = tableall;
+            debug(tableall);
+            alllatex=alllatex + '\\end{document}';
+            debug(alllatex);
+
+            // const latexOutput = document.getElementById('latex-output');
+
+            // latexOutput.innerHTML = `$$${alllatex}$$`;
+
+            // Re-render MathJax to process the new LaTeX content
+            // MathJax.typesetPromise([latexOutput]).catch((err) => console.error(err));
+
+            downloadLatex(alllatex)
+        }
+        /*document.getElementById('btn-compute').onclick = JubeteAlgorithm;*/
+        /* Construye un array con la tabla y lo devuelve */
+        function Buildtable(iter, vector, B, Usedcolumns, pivotcol, DotsP) {
+            /* Calcula dimensiones de la matriz.*/
+            var m = B.length;
+            var n = B[0].length;
+            /* Initializes table array */
+            var m1 = m + 2;
+            var n1 = n + 1;
+            var table = creatematrix(m1, n1, '');
+            /* a vector name */
+            if (iter > -1) {
+                table[0][0] = 'a' + (iter + 1).toString();
+            } else {
+                table[0][0] = ''
+            }
+            /* Escribe w o v dependiendo de si ha usado la columna o no.*/
+            for (j = 0; j < n; j ++) {
+                if (j == pivotcol) {
+                    table[0][j + 1] = 'v' + (j + 1).toString() + '*';
+                } else {
+                    if (Usedcolumns[j] == 1) {
+                        table[0][j + 1] = 'w' + (j + 1).toString();
+                    } else {
+                        table[0][j + 1] = 'v' + (j + 1).toString();
+                    }
+                }
+            }
+            /* Escribe primera columna con el vector a */
+            for (i = 0; i < m; i ++) {
+                if (iter > -1) {
+                    table[i + 1][0] = printnumber(vector[i], 6);
+                } else {
+                    table[i + 1][0] = '';
+                }
+            }
+            /* Escribe restantes columnas (matrix B). */
+            for (i = 0; i < m; i ++) {
+                for (j = 0; j < n; j ++) {
+                    table[i + 1][j + 1] = printnumber(B[i][j], 6);
+                }
+            }
+            /* Escribe fila de productos escalares */
+            DotsProw=m+1;
+            if (iter > -1) {
+                table[m + 1][0] = 't';
+                for (j = 0; j < n; j ++) {
+                    table[i + 1][j + 1] = printnumber(DotsP[j], 6);
+                }
+            } else {
+                table[m + 1][0] = '';
+                for (j = 0; j < n; j ++) {
+                    table[i + 1][j + 1] = '';
+                }
+            }
+            return table;
+        }
+ 
+        /* crea tabla en HTML y la inserta en element id where */
+        function createTable(B, caption, iter, n) {
+            /* Caption with iteration number (iter>0) or final table (iter=n) */
+            table = [];
+            if (iter % 4 == 1) {
+                table = table + '<div class="container-fluid bg-3 text-center">' + '\n';
+                table = table + '<div class="row">' + '\n';
+            }
+            table = table + '<div class="col-sm-3">' + '\n';
+            table = table + '<div id="tbl' + iter + '" text-center>' + '\n';
+            table = table + '<table border = "1" class="container-fluid text-center">' + '\n';
+            table = table + "<caption>" + caption + "</caption>" + '\n';
+            table = table + '<tbody>' + '\n';
+            var m = B.length;
+            var n = B[0].length;
+            for (var ii = 0; ii < m; ii ++) {
+                table = table + '<tr>';
+                for (var jj = 0; jj < n; jj ++) {
+            if(ii==0 || ii==DotsProw){table = table + '<th>' + B[ii][jj] + '</th> '}else{table = table + '<td>' + B[ii][jj] + '</td> '};
+                }
+                table = table + '</tr>';
+            }
+            table = table + '</tbody>' + '\n';
+            table = table + '</table>' + '\n';
+            table = table + '</div>' + '\n';
+            table = table + '</div>' + '\n';
+            if (iter % 4 == 0 || iter == n) {
+                table = table + '</div>';
+                table = table + '</div>';
+            }
+            tableall = tableall + table;
+        }
+
+        function printnumber(n, digits) {
+            if (Number.isInteger(n)) {
+                return n.toFixed()
+            } else {
+                return n.toPrecision(digits)
+            }
+        }
+
+        function getSum(total, num) {
+            return total + num;
+        }
+
+        function removearraycolumn(A, c) {
+            p = A.length;
+            for (var jj = 0; jj < p; jj ++) {
+                A[jj].splice(c, 1);
+            }
+            return A;
+        }
+
+        function removevectorcolumn(A, c) {
+            A.splice(c, 1);
+            return A;
+        }
+
+        function addDotsPorthogonalsets(orthogonalset, iter, DotsP) {
+            var k = DotsP.length;
+        var C=orthogonalset;
+            for (var ii = 0; ii < k; ii ++) {
+                if (DotsP[ii] == 0) {
+                    C[ii].push(iter + 1);
+                }
+            }
+            return C;
+        }
+
+        function addorthogonalsetscell(ortoghonalsetscell, cell){
+                var kk = cell.length;
+                for (var ii = 0; ii < kk; ii ++) {
+                        ortoghonalsetscell.push(cell[ii]);
+                }
+        }
+        /**
+        function addlist(where,list){
+            where1=where;
+                var kk = list.length;
+                for (var ii = 0; ii < kk; ii ++) {
+                        where1.push(list[ii]);
+                }
+                return where1;
+        }
+        **/
+        /**
+        function addcolumnstomatrix(A, columnlist) {
+            m = A.length;
+            n = A[0].length;
+            nc = columnlist.length;
+            var B = creatematrix(m, n + nc);
+            for (var ii = 0; ii < m; ii++) {
+                for (var jj = 0; jj < n; jj++) {
+                    B[ii][jj] = A[ii][jj];
+                }
+                for (var jj = 0; jj < nc; jj++) {
+                    B[ii][n + jj] = columnlist[jj];
+                }
+            }
+            return B;
+        }
+        **/
+        function matrixcolumn(A, p){
+            var m=A.length;
+            var C=createvector(m,0);
+                for (var ii = 0; ii < m; ii++) {
+                    C[ii]=A[ii][p];	
+                }
+            return C;
+        }
+
+        function Buildsnewcolumn(a, Ba, b, Bb){
+            var mm=Ba.length;
+            var C=createvector(n,0);
+            for(var ii=0;ii<mm;ii++){
+                C[ii]=Math.abs(b)*Ba[ii]+Math.abs(a)*Bb[ii];
+            }
+            return C;
+        }
+
+        function addcolumntomatrix(B1, column){
+            var m=B1.length;
+            for(var ii=0;ii<m;ii++){
+                B1[ii].push(column[ii]);
+            }	
+            return B1;
+        }
+
+        function formatNumber(num) {
+            // Convierte el número a cadena con notación científica si es necesario
+            let str = num.toString();
+
+            // Comprueba si el número está en notación científica
+            if (str.includes('e')) {
+                // Convierte la notación científica a número decimal
+                num = Number(num);
+                str = num.toString();
+            }
+
+            // Elimina ceros no significativos
+            let [integerPart, decimalPart] = str.split('.');
+
+            // Elimina ceros a la derecha en la parte decimal
+            if (decimalPart) {
+                decimalPart = decimalPart.replace(/0+$/, '');
+                str = decimalPart ? `${integerPart}.${decimalPart}` : integerPart;
+            }
+
+                return str;
+        }
+
+        function formatNumber(num, ndigits) {
+            // Convertir el número a una cadena con la precisión deseada
+            let str = num.toFixed(ndigits);
+            
+            // Eliminar ceros no significativos en la parte decimal
+            if (ndigits > 0) {
+                // Eliminar ceros a la derecha en la parte decimal
+                str = str.replace(/(\.\d*?)0+$/, '$1');
+                
+                // Si la parte decimal está vacía, eliminar el punto decimal
+                if (str.endsWith('.')) {
+                    str = str.slice(0, -1);
+                }
+            }
+        
+            // Convertir a entero si no hay parte decimal
+            if (Number.isInteger(Number(str))) {
+                str = Number(str).toString();
+            }
+        
+            return str;
+        }
+
+
+        // Función para convertir matriz a texto con precisión dada
+        function matrizATexto(matriz, digits) {
+            return matriz.map(fila => 
+                fila.map(num => formatNumber(num, digits)).join(',')
+            ).join('\n');
+        }
+
+        // Función para convertir texto a matriz
+        function textoAMatriz(texto) {
+            return texto.split('\n').map(fila => fila.split(',').map(Number));
+        }
+
+        // Función para convertir vector a texto con precisión dada
+        function vectorATexto(vector, digits) {
+            return matrizATexto([vector], digits);
+        }
+        /**
+        // Función para convertir texto a vector
+        function textoAVector() {
+            return textoAMatriz(texto)[0];
+        }
+        **/
+        function writeMatrixToFile(matrix, digits, filename, integer) {
+            // Convert the matrix to a string with exponential notation
+            var matrixText = '';
+            if (Array.isArray(matrix[0])) {
+                // Two-dimensional matrix
+                for (var i = 0; i < matrix.length; i++) {
+                    for (var j = 0; j < matrix[i].length-1; j++) {
+                        if (integer) {
+                            matrixText += parseInt(matrix[i][j]) + '\t'; // Use tab as delimiter
+                        } else {
+                            matrixText += matrix[i][j].toExponential(digits) + '\t'; // Use tab as delimiter
+                        }
+                    }
+                    matrixText += '\n';
+                }
+                matrixText=matrizATexto(matrix, digits)
+            } else {
+                // One-dimensional matrix
+                for (var i = 0; i < matrix.length; i++) {
+                    if (integer) {
+                        matrixText += parseInt(matrix[i]) + '\n';
+                    } else {
+                        matrixText += matrix[i].toPrecision(digits) + '\n';
+                    }
+                }
+                matrixText=vectorATexto(matrix, digits)
+
+            }
+
+            // Create a Blob object containing the matrix text
+            var blob = new Blob([matrixText], { type: 'text/plain' });
+
+            // Create a temporary URL for the Blob
+            var url = URL.createObjectURL(blob);
+
+            // Create a link element to trigger the download
+            var link = document.createElement('a');
+            link.href = url;
+            filename1=ficherodatos + filename;
+            link.download = filename1;
+            listaficherosgenerados+='\n' + filename1;
+
+            // Trigger the download
+            document.body.appendChild(link);
+            link.click();
+
+            // Clean up
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(url);
+        }
+
+        // Example usage:
+        // var matrix = [
+        //     [0.12345, 0.6789, 0.9876],
+        //     [0.54321, 0.0987, 0.6543]
+        // ];
+        // var filename = 'matrix.txt';
+        // writeMatrixToFile(matrix, 6, filename, false);
+
+        function transpose(matrix) {
+            // Check if matrix is unidimensional
+            if (typeof matrix[0] === 'number') {
+                // Convert unidimensional matrix to bidimensional
+                matrix = matrix.map(elem => [elem]);
+            }
+
+            // Get dimensions of the matrix
+            const rows = matrix.length;
+            const cols = matrix[0].length;
+
+            // Create a new matrix to store the transpose
+            const transposeMatrix = Array.from({ length: cols }, () => Array(rows).fill(0));
+
+            // Fill in the transpose matrix
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    transposeMatrix[j][i] = matrix[i][j];
+                }
+            }
+
+            return transposeMatrix;
+        }
+
+        // Example usage:
+        // const matrix = [[1, 2, 3]
+        //                [4, 5, 6],
+        //                [7, 8, 9]];
+
+        // console.log(transpose(matrix)); // Output will be the transpose of the matrix
+        /**
+        function transformarMatriz(matriz) {
+            if (!Array.isArray(matriz)) {
+                console.error('El argumento proporcionado no es una matriz.');
+                return [];
+            }
+
+            const patron = /([aIvW])(\d+)/g;
+            return matriz.map(elemento => {
+                return elemento.replace(patron, (match, letra, numero) => `$${letra}_{${numero}}$`);
+            });
+        }
+        **/
+        function generateLatexTable(matrix, ntable) {
+            if (matrix === '') {
+                return matrix;
+            }
+            if(ntable==9999){
+                latex = '\\begin{table}[h!]\n' + '\\centering\n' + '\\caption{\\label{Table' + (ntable + 1) + '}Final Table ' + '}\n' + '\\renewcommand{\\arraystretch}{0.9}\n' + '\\vspace{2mm}\n' + '\\begin{tabular}{|' + 'c|'.repeat(matrix[0].length) + '}\n' + '\\hline\n';
+            }else{
+                latex = '\\begin{table}[h!]\n' + '\\centering\n' + '\\caption{\\label{Table' + (ntable + 1) + '}Iteration ' + (ntable + 1) + '}\n' + '\\renewcommand{\\arraystretch}{0.8}\n' + '\\vspace{2mm}\n' + '\\begin{tabular}{|' + 'c|'.repeat(matrix[0].length) + '}\n' + '\\hline\n';
+            }
+
+            for (let i = 0; i < matrix.length; i++) {
+
+                if (i == 0) {
+                    const patron = /([aIvw])(\d+)/g;
+                    matrix[i] = matrix[i].map(elemento => {
+                        if (typeof elemento === 'string') {
+                            return elemento.replace(patron, (match, letra, numero) => `$${letra}_{${numero}}$`);
+                        } else {
+                            return elemento;
+                        }
+                    });
+                    const patron1 = /([*])/g;
+                    matrix[i] = matrix[i].map(elemento => {
+                        if (typeof elemento === 'string') {
+                            return elemento.replace(patron1, (match, letra) => `$^${letra}$`);
+                        } else {
+                            return elemento;
+                        }
+                    });
+                }
+
+                let row = matrix[i].map(cell => cell.toString());
+
+                // Add a line before the row with the first column equal to 't'
+                if (row[0] === 't') {
+                    latex += '\\hline\n';
+                }
+                if (row[0][0] === 'I') {
+                    if (ntable==9999){
+                        row[0]='$I_{0}$';
+                        latex += '\\hline\n';
+                        latex += '\\hline\n';
+                    }else{
+                        row[0]='$I_{' + (ntable+1) + '}$';
+                    }
+                    // row[0]='$I_{' + (ntable+1) + '}$';
+                }
+
+                latex += row.join(" & ") + " \\\\\n";
+
+                // Add double horizontal lines as specified
+                if (i === 0 || row[0] === 't') {
+                    latex += '\\hline\n';
+                }
+            }
+
+            latex += "\\hline\n\\end{tabular}\n\\end{table}\n\n";
+            return latex;
+        }
+
+
+        function GammaAlgorithm() {
+            console.log("Enters GammaAlgorithm")
+            removeElement('tablas');
+            var div = document.createElement('div');
+            div.setAttribute("id", 'tablas');
+            document.body.appendChild(div);
+            tableall = [];
+            /* Lee los datos de la pagina y los guarda en la matriz A. */
+            datamatrix = document.getElementById('input-matrix').value;
+            [AA, vectortype]=processMatrixAndVector1(datamatrix)
+
+            // debug('AA=' + AA)
+            ///* Calcula las dimensiones de la matriz AA */
+            n0 = AA.length;
+            /* m is the number of generators of the initial cone */
+            m = AA[0].length;
+            // vectortype = AA[n0 - 1];
+            // n is the dimension of the linear space
+            n= AA.length;
+            if (n== 0 || AA[0]=='NaN') {
+                alert('Error: Data matrix is not valid');
+                return
+            }
+            A = creatematrix(n, m, 0);
+            for (i = 0; i < n; i ++) {
+                for (j = 0; j < m; j ++) {
+                    A[i][j] = AA[i][j];
+                }
+            }
+            console.log(A)
+            /*
+            if (systemequations){
+                // Último elemento de la nueva columna
+                var ultimoElemento = -1;
+                // Crear la nueva columna con todos los valores 0 excepto el último elemento
+                var nuevaColumna = A.map(function(fila, indice) {
+                return indice === A.length - 1 ? ultimoElemento : 0;
+                });
+                // Añadir la nueva columna al comienzo de cada fila de la matriz original
+                var A = A.map(function(fila) {
+                return [nuevaColumna.shift()].concat(fila);
+                });
+            }
+            */
+            niterations = A[0].length;
+            datamatrix1 = document.getElementById('input-matrix1').value;
+
+            /* At this time we permit starting from a cone */
+            var BB = parse_matrix(datamatrix1);
+            if (BB.length <2 || BB[0]=='NaN') {
+                alert('Error: Initial matrix is not valid');
+                return
+            }
+            p = BB[0].length;
+            Usedcolumns = BB[BB.length - 1];
+            B = creatematrix(n, p, 0);
+            for (i = 0; i < n; i ++) {
+                for (j = 0; j < p; j ++) {
+                    B[i][j] = BB[i][j];
+                }
+            }
+            if (B.length !== n) {
+                alert('Error: Initial matrix is not valid');
+                return
+            }
+
+            orthogonalset = creatematrix(p, 1, 'empty');
+            /* Procede a meter las filas de la matriz A, una por una */
+            // n and p are the numbers of rows and columns of matrix B
+            for (iter = 0; iter < niterations; iter ++) {
+                if (iter == 8) {
+                    aa = 0;
+                }
+                n = B.length;
+                p = B[0].length;
+                /* Elige la fila i-esima y la guarda en la variable vector */
+                vector = arrayColumn(A, iter)
+                /* Calcula los productos escalares del vector por las columnas */
+                /* de la matriz B. */
+                DotsP = createvector(p, 0);
+                for (j = 0; j < p; j ++) {
+                    for (i = 0; i < n; i ++) {
+                        DotsP[j] = DotsP[j] + vector[i] * B[i][j];
+                    }
+                }
+                orthogonalset = addDotsPorthogonalsets(orthogonalset, iter, DotsP);
+
+                /* Elige como vector pivote el primero no utilizado y cuyo */
+                /* producto escalar es no nulo */
+                pivotcandidateset = createvector(p, 0);
+                Unusedcolumns = pivotcandidateset;
+                for (j = 0; j < p; j ++) {
+                    if (isnotzero(DotsP[j], vector, B, j) && Usedcolumns[j] == 0) {
+                        pivotcandidateset[j] = 1
+                    }
+                }
+                iii=lookforunitvalue();
+                if(iii!=-1){
+                    pivotcol=iii
+                }else{
+                    pivotcol = pivotcandidateset.indexOf(1);
+                }
+                /* Mete el valor del pivote (su producto escalar) en pivotval. */
+                pivotval = DotsP[pivotcol];
+                /* Imprime la tabla. */
+                table = BuildGammatable(iter, vector, B, Usedcolumns, pivotcol, DotsP, orthogonalset, niterations);
+                table1=[...table];
+                latex=generateLatexTable(table1, iter);
+                alllatex=alllatex + latex;
+                if (iter > -1) {
+                    caption = 'Iteration ' + (iter + 1);
+                } else {
+                    caption = 'Final Table';
+                }
+                createTable(table, caption, iter + 1, n + 1);
+                /* PrintMatrix(iter,vector,B,Usedcolumns, pivotcol,DotsP);*/
+                if (pivotcol > -1) {
+                    /* Transforma la matriz B (Proceso de pivotaje) si el pivote */
+                    /* es no nulo. */
+                    if (pivotval != 0) {
+                        /* Marca la columna como usada */
+                        /* Usedcolumns[pivotcol] = iter + 1; */
+                        Usedcolumns[pivotcol] = 1;
+                        /* Transforma la columna pivote dividiendo por pivotval */
+                        for (i = 0; i < n; i ++) {
+                            B[i][pivotcol] = -B[i][pivotcol] / pivotval;
+                        }
+                        /* Transforma las columnas no pivote. */
+                        for (j = 0; j < p; j ++) {
+                            if (j != pivotcol) {
+                                for (i = 0; i < n; i ++) {
+                                    B[i][j] = B[i][j] + DotsP[j] * B[i][pivotcol];
+                                }
+                                if (DotsP[j] !== 0) {
+                                    orthogonalset[j].push(iter + 1);
+                                }
+                            }
+                        }
+                        /* If the cone is Brho + Cpi, eliminate pivot columns */
+                        if (vectortype[iter] == 0) {
+                            B = removearraycolumn(B, pivotcol);
+                            orthogonalset=removevectorcolumn(orthogonalset, pivotcol);
+                            Usedcolumns = removevectorcolumn(Usedcolumns, pivotcol);
+                            DotsP = removevectorcolumn(DotsP, pivotcol);
+                        }
+                    }
+                } else {
+                    poscols = checkpos(DotsP);
+                    negcols = checkneg(DotsP);
+                    selectedcols = checksel(DotsP);
+                    Usedcolumnspos = checkpos(Usedcolumns);
+                    nullcols = checknull(DotsP);
+                    validnullcols = checkvalid(DotsP, Usedcolumns);
+                    ortoghonalsetscell = creatematrix(poscols.length * negcols.length + validnullcols.length,1,'empty');
+                    nn = -1;
+                    for (i = 0; i < poscols.length; i ++) {
+                        p1 = poscols[i];
+                        for (j = 0; j < negcols.length; j ++) {
+                            n1 = negcols[j];
+                            nn = nn + 1;
+                            aux = intersection(orthogonalset[p1], orthogonalset[n1], niterations + 1);
+                            if(iter==7 && nn==9){
+                                debug('nn=' + nn + 'ortoghonalsetscell[nn]=' + ortoghonalsetscell[nn] + ' aux=' + aux);
+                            }
+                            addorthogonalsetscell(ortoghonalsetscell[nn], aux)
+                        }
+                    }
+                    for (k = 0; k < validnullcols.length; k ++) {
+                        n2 = validnullcols[k];
+                        aux1 = orthogonalset[n2];
+                        nn = nn + 1;
+                        addorthogonalsetscell(ortoghonalsetscell[nn], aux1)
+                        if(iter==7){debug(' aux1=' + aux1);}
+                    }
+                    if (vectortype[iter] == 0) {
+                        passcols = nullcols;
+                    } else {
+                        passcols = selectedcols;
+                    }
+                    B1 = submatrix(B, passcols)
+
+                    orthogonalset1 = subvector(orthogonalset, passcols);
+                    Usedcolumns1 = subvector(Usedcolumns, passcols);
+
+                    ncols = passcols.length;
+                    nt = nn + 1;
+                    nn = -1;
+                    for (i = 0; i < poscols.length; i ++) {
+                        p1 = poscols[i];
+                        for (j = 0; j < negcols.length; j ++) {
+                            n1 = negcols[j];
+                            nn = nn + 1;
+                            added = 1;
+                            for (nnn = 0; nnn < nt; nnn ++) {
+                                if(nnn !== nn){
+                                    difset = difference(ortoghonalsetscell[nn], ortoghonalsetscell[nnn], niterations + 1);
+                                    if (difset.length==0) {
+                                        added = 0;
+                                        break
+                                    }
+                                }
+                            }
+                            if (added) {
+                                ncols = ncols + 1;
+                                Ba = matrixcolumn(B, p1);
+                                Bb = matrixcolumn(B, n1);
+                                column = Buildsnewcolumn(DotsP[p1], Ba, DotsP[n1], Bb);
+                                B1 = addcolumntomatrix(B1, column)
+                                aux = ortoghonalsetscell[nn];
+                                aux.push(iter+1);
+                                loc=B1[0].length-1;
+                                orthogonalset1.push(aux);
+                                /* Usedcolumns1[loc] = iter+1;*/
+                                Usedcolumns1[loc] = 1;
+                            }
+                        }
+                    }
+
+                    n = B1[0].length;
+                    B = B1;
+                    orthogonalset = orthogonalset1;
+                    Usedcolumns = Usedcolumns1;
+                    Wcolumns=Usedcolumns;
+                    console.log(Wcolumns)
+                }
+                B=dividirColumnasPorUltimoElementoPositivo(B)
+            }
+        
+            console.log('FIN')
+            if(systemequations){
+                C = generarMatrizC(B, Wcolumns);
+                encabezado = generarEncabezado(C);
+                mostrarTabla(C, encabezado);
+                document.getElementById('SEquationsid').style.display = 'block';
+            }   
+            console.log(iter + " B_dividida: " + B);
+            /* Imprime la tabla. */
+            /* document.getElementById('output').innerHTML = print_matrix(B);*/
+            iter = -1;
+            pivotcol = -1;
+            writeMatrixToFile(B, digits, 'B.txt',0)
+            writeMatrixToFile(orthogonalset, digits, 'orthogonalset.txt',1)
+            /* alert(orthogonalset) */
+            writeMatrixToFile(transpose(Wcolumns), digits, 'Wcolumns.txt',1)
+
+            table = BuildGammatable(iter, vector, B, Usedcolumns, pivotcol, DotsP, orthogonalset, niterations);
+            table1=[...table];
+            latex=generateLatexTable(table1, 9999);
+            alllatex=alllatex + latex;
+            /*document.getElementById('output').innerHTML = print_matrix(B);*/
+            if (iter > -1) {
+                caption = 'Iteration ' + (iter + 1);
+            } else {
+                caption = 'Final Table';
+            }
+            createTable(table, caption, n + 1, n + 1);
+            document.getElementById('tablas').innerHTML = tableall;
+            debug(tableall);
+
+            alllatex=alllatex + '\\end{document}';
+            debug(alllatex);
+
+            // const latexOutput = document.getElementById('latex-output');
+
+            // latexOutput.innerHTML = `$$${alllatex}$$`;
+
+            // Re-render MathJax to process the new LaTeX content
+            // MathJax.typesetPromise([latexOutput]).catch((err) => console.error(err));
+
+            downloadLatex(alllatex)
+        }
+
+        /* Construye un array con la tabla y lo devuelve */
+        function BuildGammatable(iter, vector, B, Usedcolumns, pivotcol, DotsP, orthogonalset, niterations) {
+            /* Calcula dimensiones de la matriz.*/
+            var mm = B.length;
+            var n = B[0].length;
+            /* Initializes table array */
+            var m1 = mm+ 2 + niterations;
+            var n1 = n + 1;
+            var table = creatematrix(m1, n1, '');
+            /* a vector name */
+            if (iter > -1) {
+                table[0][0] = 'a' + (iter + 1).toString();
+            } else {
+                table[0][0] = ''
+            }
+            /* Escribe w o v dependiendo de si ha usado la columna o no.*/
+            for (var jj = 0; jj < n; jj ++) {
+                if (jj == pivotcol) {
+                    table[0][jj + 1] = 'v' + (jj + 1).toString() + '*';
+                } else {
+                    if (Usedcolumns[jj] >0) {
+                        table[0][jj + 1] = 'w' + (jj + 1).toString();
+                    } else {
+                        table[0][jj + 1] = 'v' + (jj + 1).toString();
+                    }
+                }
+            }
+            /* Escribe primera columna con el vector a */
+            for (var ii = 0; ii < mm; ii ++) {
+                if (iter > -1) {
+                    table[ii + 1][0] = printnumber(vector[ii], 6);
+                } else {
+                    table[ii + 1][0] = '';
+                }
+            }
+            /* Escribe restantes columnas (matrix B). */
+            for (var ii = 0; ii < mm; ii ++) {
+                for (var jj = 0; jj < n; jj ++) {
+                    table[ii + 1][jj + 1] = printnumber(B[ii][jj], 6);
+                }
+            }
+            /* Escribe fila de productos escalares */
+            DotsProw=mm+1;
+            if (iter > -1) {
+                table[mm + 1][0] = 't';
+                for (var jj = 0; jj < n; jj ++) {
+                    table[mm + 1][jj + 1] = printnumber(DotsP[jj], 6);
+                }
+            } else {
+                table[mm + 1][0] = '';
+                for (var jj = 0; jj < n; jj ++) {
+                    table[mm + 1][jj+ 1] = '';
+                }
+            }
+            table[mm + 2][0] = 'I' + (iter + 1);
+            for (var jj = 0; jj < n; jj ++) {
+                for (var ii = 0; ii < orthogonalset[jj].length; ii ++) {
+                    aux = orthogonalset[jj][ii];
+                    if (aux !== 0) {
+                        table[mm + 2 + ii][jj + 1] = aux;
+                    } else {
+                        table[mm + 2 + ii][jj + 1] = '';
+                    }
+                }
+            }
+            /* Eliminate blank lines */
+            for (var ii = table.length - 1; ii > mm + 2; ii -= 1) {
+                if (table[ii].reduce(getSum) == 0) {
+                    table.pop()
+                }
+            }
+            /* Eliminate zeroes in the I set */
+            for (var ii = mm + 2; ii < table.length; ii ++) {
+                for (var jj = 0; jj < table[ii].length; jj ++) {
+                    if (table[ii][jj] == 0) {
+                        table[ii][jj] = ''
+                    }
+                }
+            }
+            return table;
+        }
+        // FIN ALGORITMO ORTOGONALIZACION
+        /**************************************************************/
+
+        
+        /* Example reading a matrix from web page */
+        /**
+        function handleSelectFileSelect(evt) {
+            var files = evt.target.files; // FileList object
+            // Loop through the FileList and render text files as texts.	
+            for (var i = 0, f; f = files[i]; i++) {
+                // Only process textfiles.	
+                if (!f.type.match('text.*')) {
+                    continue;
+                }
+                var reader2 = new FileReader();
+                // Read in the textfile as textL
+                reader2.readAsText(f);
+                var matrix = reader2.result.split(/\r?\n/).map(pair => pair.split(/" "/).map(Number));
+                table = makeTable(matrix);
+                text = print_matrix(matrix);
+                document.getElementById('input-matrix').style.display = "block";
+                document.getElementById('input-matrix').innerHTML = table
+                document.getElementById('input-matrix').innerHTML = text
+                document.getElementById('tbl0').innerHTML = table
+                document.getElementById('tbl0').innerHTML = text
+            }
+        }
+        **/
+        /**************************************************************/
+
+        /**
+        function applySubindices(cell) {
+            return cell.replace(/([a-zA-Z])(\d+)/g, '$1_{$2}');
+        }
+        **/
+        function downloadLatex(latexCode) {
+            // const latexCode = document.getElementById('latexOutput').value;
+            const blob = new Blob([latexCode], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            filename1=ficherodatos + 'tablas_latex.tex';
+            link.download = filename1;
+            listaficherosgenerados+='\n' + filename1;
+            document.body.appendChild(link);
+            link.click();
+
+            // Limpieza
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+
+        /* 
+        const table = [
+            ['a5', 'w1', 'w2', 'w3', 'v4', 'w5'],
+            ['1', '-1', '0', '0', '0', '-1'],
+            ['1', '0', '-1', '0', '-1', '0'],
+            ['1', '0', '0', '-1', '0', '1'],
+            ['1', '0', '0', '0', '1', '0'],
+            ['1', '0', '0', '0', '0', '1'],
+            ['t', '-1', '-1', '-1', '0', '1'],
+            ['I5', 1, 1, 1, 1, 2
+            ['', 3, 2, 2, 2, 3],
+            ['', 4, 3, 4, 3, 4],
+            ['', '', '', '', 4, ''],
+            ['', '', '', '', 5, '']
+        ];
+        */
+
+        // const latexCode = generateLatexTable(table, 1000);
+        // const latexOutput = document.getElementById('latex-output');
+
+        // latexOutput.innerHTML = `$$${latexCode}$$`;
+
+        // Re-render MathJax to process the new LaTeX content
+        // MathJax.typesetPromise([latexOutput]).catch((err) => console.error(err));
+
+        /*
+                    var div = document.createElement('div');
+                    div.setAttribute("id", 'tablas');
+                    document.body.appendChild(div);
+            */
+
+        let initialScrollPosition = 0;
+        document.getElementById('bibliografiaBtn').onclick = function() {
+            initialScrollPosition = window.scrollY;
+            const bibliographyDiv = document.createElement('div');
+            bibliographyDiv.innerHTML = `
+                <h2><b>Personal Bibliography</b></h2>
+                <div style="text-align:center;">
+                    <button id="volverBtn" style="display: none;">Volver</button>
+                </div>
+                <div class="bibliography">
+                    <ul>
+                        <li><b>Castillo, E.</b> and <b>Jubete, F.</b> (2004). The Gamma-algorithm and some applications. <i>International Journal of Mathematical Education in Science and Technology</i>, 35(3), 369-389. Taylor & Francis.</li>
+                        <li><b>Jubete, F.</b> and <b>Castillo, E.</b> (2007). A complete description of cones and polytopes including hypervolumes of all facets of a polytope. <i>International Journal of Mathematical Education in Science and Technology</i>, 38(1), 85-102. Taylor & Francis.</li>
+                        <li><b>Castillo, F.</b>, <b>Conejo, A. J.</b>, <b>Pruneda, E.</b>, and <b>Solares, C.</b> (2007). Observability in linear systems of equations and inequalities: Applications. <i>Computers and Operations Research</i>, 34(6), 1708-1720. Part Special Issue: Odysseus 2003 Second International Workshop on Freight Transportation Logistics. doi: <a href="https://doi.org/10.1016/j.cor.2005.05.035">https://doi.org/10.1016/j.cor.2005.05.035</a></li>
+                        <li><b>Castillo, E.</b>, <b>Jubete, F.</b>, <b>Pruneda, E.</b>, and <b>Solares, C.</b> (2002). Obtaining simultaneous solutions of linear subsystems of inequalities and duals. <i>Linear Algebra and its Applications</i>, 346, 131-154. doi: <a href="https://doi.org/10.1016/S0024-3795(01)00500-6">10.1016/S0024-3795(01)00500-6</a></li>
+                        <li><b>Castillo, E.</b>, <b>Cobo, A.</b>, <b>Jubete, F.</b>, <b>Pruneda, E.</b>, and <b>Castillo, C.</b> (2001). An Orthogonally Based Pivoting Transformation of Matrices and Some Applications. <i>SIAM Journal on Matrix Analysis and Applications</i>, 22(3), 666-681.</li>
+                        <li><b>Castillo, E.</b>, <b>Cobo, A.</b>, <b>Jubete, F.</b>, and <b>Pruneda, E.</b> (1999). <i>Orthogonal sets and polar methods in linear algebra: Applications to matrix calculations, systems of equations, inequalities, and linear programming</i>. Wiley Interscience. John Wiley and Sons.</li>
+                        <li><b>Castillo, Enrique</b> (2023). A State of the Art Review of Systems of Linear Inequalities and Related Observability Problems. <i>Algorithms</i>, 16(8), Article 356. doi: <a href="https://doi.org/10.3390/a16080356">10.3390/a16080356</a></li>
+                    </ul>
+                </div>
+            `;
+
+            document.body.appendChild(bibliographyDiv);
+            document.getElementById('bibliografiaBtn').style.display = 'none';
+            document.getElementById('jumboid').style.display = 'none';
+            document.getElementById('rowid').style.display = 'none';
+            document.getElementById('contentDivid').style.display = 'none';
+            document.getElementById('SEquationsid').style.display = 'none';
+
+
+            document.getElementById('volverBtn').style.display = 'inline';
+            window.scrollTo(0, document.body.scrollHeight);
+
+            document.getElementById('volverBtn').onclick = function() {
+                const bibliographyDiv = document.querySelector('.bibliography').parentElement;
+                document.body.removeChild(bibliographyDiv);
+                document.getElementById('bibliografiaBtn').style.display = 'inline';
+                // document.getElementById('volverBtn').style.display = 'none';
+                document.getElementById('jumboid').style.display = 'block';
+                document.getElementById('rowid').style.display = 'block';
+                window.scrollTo(0, initialScrollPosition);
+            };
+        };
+
+
+        savedScrollPosition = 0;
+        gammaoption = 0; // Cambia a 1 para mostrar el contenido de ALGEBRA II
+
+        function showApplications() {
+            savedScrollPosition = window.scrollY; // Guardar la posición actual
+            document.getElementById('contentDivid').style.display = 'block';
+            document.getElementById('jumboid').style.display = 'none';
+            document.getElementById('rowid').style.display = 'none';
+
+            const dynamicList = document.getElementById('dynamicList');
+            dynamicList.innerHTML = ''; // Limpiar cualquier contenido anterior
+            // Ajustar según sea necesario
+            populateList();
+        }
+    
+        function populateList() {
+            const dynamicList = document.getElementById('dynamicList');
+            if (gammaoption === 0) {
+                dynamicList.innerHTML += `
+                    <b>ALGEBRA I</b>
+                    <br>
+                    <b>A course explaining all the applications of the orthogonalization Algorithm:
+                    <a href="#" onclick="openVideo('https://www.uclm.es/Conocimiento/Cursos/Algebra-1-En')">[link]</a>
+                    <a href="#" onclick="openVideo('https://www.uclm.es/Conocimiento/Cursos/Algebra-1-es')">[link]</a>
+                    </b>
+                    <br>
+                    <br>
+                    <p> A tutorial video of how to use the algorithm is given in <a href="#" onclick="openVideo('https://www.youtube.com/embed/Qzwvde8CXKM?start=22&autoplay=1&fs=1')">[link]</a>
+
+                    <p> A motivation summary of all videos on this part is given in <a href="#" onclick="openVideo('https://www.youtube.com/embed/ao6RodSACRY?start=17&autoplay=1&fs=1')">[link]</a>
+                    <p> The orthogonalization Algorithm is designed to obtain the linear subspace of a given subspace and its complement subspace in the given linear space. The columns used for pivoting contain the orthogonal linear subspace generators and the rest of columns are the generators of the complementary linear subspace. At each iteration, the orthogonal and complementary subspace of the linear subspace generated by previous vectors are obtained. </p>
+                    
+                    <p>Apart from allowing us to see linear slgebra from the point of view of orthogonality, it is very useful, because it solves many common prolems in linear algebra problems, such as those following:</p>
+
+                    <p>In particular we will see:</p>
+
+
+                    <li class="list-item">The orthogonalization Algorithm.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/zErGQEHJPtg?start=35&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/zErGQEHJPtg?start=17&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">is designed to obtain the orthogonal linear subspace of a given subspace and its complement subspace in the given linear space. The columns used for pivoting contain the orthogonal linear subspace generators and the rest of columns are the generators of the complementary linear subspace. At each iteration, the orthogonal and complementary subspace of the linear subspace generated by previous vectors are obtained. Apart from allowing us to see linear algebra from the point of view of orthogonality, it is very useful, because it solves many common problems in linear algebra problems, such as those following:</p>
+                    
+                    
+
+                    <li class="list-item">How to get the subspace orthogonal to a given subspace and its complement subspace.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/WhwYBWrKn8A?start=24&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/E3efohRCGFQ?start=16&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">The column vectors of the initial matrix are the generators of the linear space and the vectors you introduce at each iteration are the generators of the linear subspace, whose linear subspace is desired.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to obtain the inverse of a matrix.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/btDcXQX7ukM?start=23&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/u_QyHbSgpHk?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">You need only to provide the row vectors of the matrix you want to invert one by one at each iteration.</p>
+                    
+                    
+                    <li class="list-item">How to update the inverse of a matrix after changing a row (or column).>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/btDcXQX7ukM?start=282&end=369&autoplay=1&fs=1)">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/u_QyHbSgpHk?start=15&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/u_QyHbSgpHk?start=260&end=349&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">You just need to continue the process with one more vector, which is the vector associated with the row being changed, and pivot with the column that shares the same ordinal number as the selected row.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to obtain the determinant of a matrix.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/btDcXQX7ukM?start=200&end=279&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">The determinant of a matrix can be obtained by multiplying all pivot values, that is, the dot products of the pivot columns.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to update the determinant of a matrix after changing a row or column.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/btDcXQX7ukM?start=360&end=400&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/u_QyHbSgpHk?start=349&end=379&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">To update the determinant you just need to multiply the actual determinant by the pivot value of the extra iteration.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to determine a basis of a linear space given a set of generators.></li>
+                    <p class="explanation">You just need to start with the unit matrix and iterate with each row of the set of generators of the linear space whose basis is looked for and remove all the columns that have been used to pivot.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to determine the rank of a matrix.> 
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/Uk-cdyZjpw0?start=40&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://youtu.be/kLmxb_X6lJI?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">It is the number of columns that have not been used for pivoting.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to determine if a vector, V, belongs to a linear space.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/f81KVKUFAQQ?start=22&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://youtu.be/kLmxb_X6lJI?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">You apply the algorithm to a basis or set of generators of the linear space and obtain the dot product of V and the column vectors in the pivot columns. If all values are zero, the vector belongs to the given linear subspace. Otherwise, it does not belong.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to obtain the subspace intersection of two linear subspaces A and B.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/DpLrtEY2C8U?start=22&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://youtu.be/clj1gvAbhKc?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">You first obtain the orthogonal subspace, C, of B and later, with column initial matrix the generators of A, obtain the orthogonal linear subspace of C in A.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to solve a homogeneous linear system of equations.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/oxiLJlzMR_U?start=27&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed//cDgrnnGUYio?start=16&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">You write the system of equations as dot products of the vectors of coefficients of the rows of the system matrix and the vector of unknowns, and then you see that the set of solutions is the orthogonal linear subspace to the linear subspace generated by these rows.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to solve a complete linear system of equations.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/y6Q5LbuAi8Q?start=22&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/QIVhCShJ2mc?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">You can do it by adding a virtual unknown and converting it to a homogeneous system.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to study the compatibility of a linear system of equations.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/29xNdBEVhJA?start=25&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/Zoed0dLHpco?start=16&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">You write the system as the unknowns times the column vectors of the linear system matrix equal to the column vector, h, of independent terms of the system. Then, you discover that the problem is equivalent to determining whether or not the vector h belongs to the linear subspace generated by the columns of the system matrix.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to apply this to a water supply system.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/lGf1JtXm3AU?start=22&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/I1MuMG-W3x8?start=17&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">To clarify the concepts and methods used, we strongly recommend the indicated videos.</p>
+
+                <li class="list-item">Motivatoion files.> 
+                    <p class="explanation">For a general view of the course dedicated to the orthogonalization algorithm, see the video 
+                    <a href="#" onclick="openVideo('https://www.youtube.com/embed/UxQRDycjg0E?start=28&autoplay=1&fs=1')">[link]</a>.</p>
+                    <a href="#" onclick="openVideo('https://www.youtube.com/embed/I1MuMG-W3x8?start=17&autoplay=1&fs=1')">[link]</a>
+                    <a href="#" onclick="openVideo('https://www.youtube.com/embed/ao6RodSACRY?start=17&autoplay=1&fs=1')">[link]</a>
+                </li>
+                `;
+
+            } else if (gammaoption === 1) {
+                dynamicList.innerHTML += `
+                <b>ALGEBRA II</b>
+                    A course explaining all the applications of the orthogonalization Algorithm:
+                    <a href="#" onclick="openVideo('https://www.uclm.es/Conocimiento/Cursos/Algebra-2-En')">[link]</a>
+                    <a href="#" onclick="openVideo('https://www.uclm.es/Conocimiento/Cursos/Algebra-2es')">[link]</a>
+                    <br>
+                    <br>
+                    <p> The Dual cone algorithm is designed to obtain the dual cone of a given cone subspace in a given linear space. The columns used for pivoting contain the dual cone generators, named v or w, which can be used with real numbers , those named v, or non-negative real number as linear combinations, those named w. At each iteration, the dual cone of the cone generated by previous vectors are obtained. In addition we also get the faces of the initial cone. </p>
+                    
+                    <p>As the orthogonal algorithm, apart from allowing us to see linear algebra from duality, it is very useful because it solves many common prolems in linear algebra problems, such as those following:</p>
+
+                    <p>In particular we will see:</p>
+                    
+                    <li class="list-item">The Dual cone algorithm.> 
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/i7iBfBNGnUY?start=22&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/5kF-Rh5_Pxk?start=17&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">is designed to obtain the dual cone or polar cone of a given cone in the dual space. The algorithm provides all the facets or faces of the original cone with all its corresponding dimensions, the edges of the cone and the faces of the cone of any dimension that is associated with the dual cone and its faces of any dimension. You can apply this algorithm to solve problems of inequalities and to determine the linear subspace generated by the edges and other problems involving cones and polytopes. This algorithm is extremely powerful because it allows you to tackle problems involving systems of inequalities, compatibility of inequalities, the determination of vertices of a polytope and the cone associated with a polytope.</p>
+                    
+                    
+                    
+                    <li class="list-item">The concepts of cone and polytope.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/pUh0-sBt-To?start=21&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/VVHncHngLgw?start=15&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/TkDITBpegdE?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">In particular, any linear space is a cone, but not any cone is a linear subspace. Looking at linear subspaces as cones enriches the vision of the possibilities of linear subspaces.</p>
+                    
+                    
+                    
+                    <li class="list-item">The concept of dual or polar cone of a cone, with very intuitive examples.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/5kF-Rh5_Pxk?start=22&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">This section explores the concept of dual cones with practical examples to aid understanding.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to get the dual cone.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/i7iBfBNGnUY?start=22&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">This section describes the steps to derive the dual cone from a given cone in a linear space.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to reduce a cone to its standard or minimum form.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/StNLbiQg8TM?start=18&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/7fCheRSkbYw?start=17&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">This step explains the process of simplifying a cone to its most basic form.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to obtain the edges of a cone.></li>
+                    <p class="explanation">This section covers the method to determine the edges of a cone. The Gamma algorithm gives a basis of the linear space and the set of edges of the acute cone.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to get faces or facets of all dimensions of a cone or polytope.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/i7iBfBNGnUY?start=18&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">This section explores how to identify faces and facets of different dimensions in cones and polytopes. The Gamma algorithm gives a basis of the linear space and the set of edges of the acute cone. It also gives the faces of the initial cone in the lower part of the tables.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to know if a vector belongs or not to a cone.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/oG32HYLH0-4?start=18&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/oG32HYLH0-4?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">This section provides a method to check whether a given vector is a part of a cone.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to get the cone intersection of two given cones.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/IILU9fa83DE?start=18&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/UufeKR3PVag?start=16&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/6BE3sx1XbEI?start=15&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/Akkv1H2uR60?start=16&autoplay=1&fs=1')">[link]</a>
+
+                    </li>
+                    <p class="explanation">This section explains how to find the intersection of two cones.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to get the vertices of a polytope.>
+                    </li>
+                    <p class="explanation">This section discusses the method to determine the vertices of a polytope. Usando la idea de cono asoiciado a un politopo, pueden determinarse los vértices de un polítopo, ya que será, las aristas sel cono asociado.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to solve a homogeneous linear system of inequalities.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/OFYuFrojwyU?start=23&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://youtu.be/ME1tiOxO1Ak?start=17&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">This section covers the solution of homogeneous systems of inequalities using cones.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to solve a complete linear system of inequalities.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/lY7T4XQL7O8?start=23&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/YSBxb_g8wOs?start=23&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/3zvclx3oNSA?start=17&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/SkCM6YxmnXc?start=16&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://youtu.be/QytPndkeoas?start=17&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">This section explains how to handle complete systems of linear inequalities.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to know if a system of inequalities is compatible.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/g9g8M_YQnXs?start=22&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://youtu.be/aPNX4NJXdDE?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">This section helps to determine whether a given system of inequalities is compatible.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to get the cone associated with a polytope.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/sWDudq7XZNs?start=17&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://youtu.be/sWDudq7XZNs?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">This section explains how to derive the cone associated with a polytope.</p>
+                    
+                    
+                    
+                    <li class="list-item">How to apply this to a water supply system.>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/UzJDwxwgy_M?start=18&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/I1MuMG-W3x8?start=15&autoplay=1&fs=1')">[link]</a>
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/UzJDwxwgy_M?start=15&autoplay=1&fs=1')">[link]</a>
+                    </li>
+                    <p class="explanation">To clarify the concepts and methods used, we strongly recommend the indicated videos.</p>
+
+                    <p class="explanation">For a general view of the course dedicated to the Dual cone algorithm, see the video 
+                        <a href="#" onclick="openVideo('https://www.youtube.com/embed/FzC_q_wWGjo?start=18&autoplay=1&fs=1')">[link]</a>.</p>
+                
+                
+                
+                `;
+            }
+        }
+
+        function openVideo(url) {
+            try {
+                window.open(url, '_blank');
+            } catch (error) {
+                console.error('Error al abrir el video:', error);
+                alert('No se pudo abrir el video. Por favor, inténtalo de nuevo más tarde.');
+            }
+        }
+
+        function goBack() {
+            document.getElementById('contentDivid').style.display = 'none';
+            document.getElementById('jumboid').style.display = 'block';
+            window.scrollTo(0, savedScrollPosition); // Volver a la posición inicial
+        }
+
+
+        function converttoequation(A, gammaoption) {
+            // Paso 1: Cambiar la última columna de A
+            let lastColumn = A.map(row => row[row.length - 1]);
+            A.forEach((row, index) => row[row.length - 1] = -lastColumn[index]);
+
+            // Paso 2: Transponer la matriz
+            let B = A[0].map((_, colIndex) => A.map(row => row[colIndex]));
+
+            // Paso 3: Añadir columna nueva si gammaoption es 1 o true
+            if (gammaoption == 1 || gammaoption === true) {
+                let newColumn = new Array(B.length).fill(0);
+                newColumn[newColumn.length - 1] = -1;
+                B = B.map((row, index) => [newColumn[index], ...row]);
+            }
+
+                return B;
+        }
+
+
+        /**
+        function textmatrixtomatrix(text) {
+                return text.trim().split('\n').map(row => row.split(',').map(Number));
+            }
+        **/
+       /**
+        function textvectortovector(text) {
+            return text.trim().split(',').map(Number);
+        }
+        **/
+       /**
+        function textmatrixvectortomatrixvector(text) {
+            const parts = text.trim().split('\n\n');
+            return parts.map(part => part.split('\n').map(row => row.split(',').map(Number)));
+        }
+        **/
+        function matrixtotextmatrix(matrix) {
+            return matrix.map(row => row.join(',')).join('\n') + '\n';
+        }
+
+        function vectortotextvector(vector) {
+            return vector.join(',') + '\n';
+        }
+        /**
+        function matrixvectortotextmatrixvector(matrixvector) {
+            return matrixvector.map(matrix => matrix.map(row => row.join(',')).join('\n')).join('\n\n') + '\n';
+        }
+            **/
+        function transposeMatrix(matrix) {
+            // Verifica que la matriz no esté vacía
+            if (matrix.length === 0) {
+                return [];
+            }
+
+            // Crea una nueva matriz con el número de filas y columnas invertidas
+            let transposed = [];
+
+            for (let i = 0; i < matrix[0].length; i++) {
+                transposed[i] = [];
+                for (let j = 0; j < matrix.length; j++) {
+                    transposed[i][j] = matrix[j][i];
+                }
+            }
+
+            return transposed;
+        }
+
+        B = [
+            [1, 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10, 11, 12],
+            [0, 1, 0, 1]
+        ];
+        Wcolumns = [0, 1, 1, 1];
+
+        subespacio = [];
+        cono = [];
+        politopo = [];
+
+        function generarMatrizC(B, Wcolumns) {
+            subespacio = [];
+            cono = [];
+            politopo = [];
+
+            if(gammaoption){
+                for (let i = 0; i < B[0].length; i++) {
+                    if (Wcolumns[i] === 0) {
+                        subespacio.push(B.map(row => row[i]));
+                    } else if (Wcolumns[i] === 1 && B[B.length - 1][i] === 0) {
+                        cono.push(B.map(row => row[i]));
+                    } else if (Wcolumns[i] === 1 && B[B.length - 1][i] === 1) {
+                        politopo.push(B.map(row => row[i]));
+                    }
+                }
+                return [...subespacio, ...cono, ...politopo];
+            }else{
+                for (let i = 0; i < B[0].length; i++) {
+                    if (Wcolumns[i] === 1) {
+                        subespacio.push(B.map(row => row[i]));
+                    } else if (Wcolumns[i] === 0 && B[B.length - 1][i] === 1) {
+                        politopo.push(B.map(row => row[i]));
+                    }
+                }
+                return [...subespacio, ...cono, ...politopo];
+            }
+        }
+
+        function generarEncabezado(C) {
+            let encabezado = [];
+            let contador_v = 1, contador_w = 1, contador_z = 1;
+
+            for (let i = 0; i < C.length; i++) {
+                if (i < subespacio.length) {
+                    encabezado.push(`v${contador_v++}`);
+                } else if (i < subespacio.length + cono.length) {
+                    encabezado.push(`w${contador_w++}`);
+                } else {
+                    encabezado.push(`z${contador_z++}`);
+                }
+            }
+
+            return encabezado;
+        }
+
+        function mostrarTabla(C, encabezado) {
+            // Eliminar la última fila de la matriz C antes de mostrarla
+            C = C.map(col => col.slice(0, -1));
+            let tablaHTML = '<table><tr>';
+            encabezado.forEach((col, index) => {
+                let clase = index < subespacio.length ? 'subespacio' : (index < subespacio.length + cono.length ? 'cono' : 'politopo');
+                tablaHTML += `<th class="${clase}">${col}</th>`;
+            });
+            tablaHTML += '</tr>';
+
+            for (let i = 0; i < C[0].length; i++) {
+                tablaHTML += '<tr>';
+                for (let j = 0; j < C.length; j++) {
+                    let clase = j < subespacio.length ? 'subespacio' : (j < subespacio.length + cono.length ? 'cono' : 'politopo');
+                    tablaHTML += `<td class="${clase}">${C[j][i]}</td>`;
+                }
+                tablaHTML += '</tr>';
+            }
+
+            tablaHTML += '</table>';
+            document.getElementById('tabla-container').innerHTML = tablaHTML;
+        }
+        function generarLatex() {
+            let latex = '\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\begin{document}\n';
+
+            // Generar tabla con encabezado
+            latex += '\\begin{tabular}{|' + 'c|'.repeat(encabezado.length) + '}\n\\hline\n';
+            latex += encabezado.join(' & ') + ' \\\\\n\\hline\n';
+
+            // Quitar la última columna de C
+            let C1 = removeLastColumn(C);
+
+            // Añadir filas de la tabla
+            for (let i = 0; i < C1[0].length; i++) {
+                latex += C1.map(col => col[i]).join(' & ') + ' \\\\\n\\hline\n';
+            }
+
+            latex += '\\end{tabular}\n\\end{document}';
+
+            // Crear el archivo blob y descarga
+            const blob = new Blob([latex], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+
+            // Nombre del archivo
+            const filename1 = ficherodatos + 'SystemEquations.tex';
+            link.download = filename1;
+
+            // Actualizar lista de archivos generados
+            listaficherosgenerados += '\n' + filename1;
+
+            // Descargar archivo
+            link.click();
+        }
+
+
+        function generarLatexOLD() {
+            let latex = '\\documentclass{article}\n\\usepackage[utf8]{inputenc}\n\\begin{document}\n';
+            latex += '\\begin{tabular}{|' + 'c|'.repeat(encabezado.length) + '}\n\\hline\n';
+            latex += ' & ' + encabezado.join(' & ') + ' \\\\\n\\hline\n';
+            C1=removeLastColumn(C)
+            for (let i = 0; i < C1[0].length; i++) {
+                latex += C1.map(col => col[i]).join(' & ') + ' \\\\\n\\hline\n';
+            }
+
+            latex += '\\end{tabular}\n\\end{document}';
+
+            const blob = new Blob([latex], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            filename1=ficherodatos + 'SystemEquations.tex';
+            link.download = filename1;
+            listaficherosgenerados+='\n' + filename1;
+            link.click();
+        }
+        /*
+        C = generarMatrizC(B, Wcolumns)
+        encabezado = generarEncabezado(C);
+        mostrarTabla(C, encabezado);
+        */
+        function multiplyByDiagonalMatrix(matrix, diagonal) {
+            let result = [];
+            for (let i = 0; i < matrix.length; i++) {
+                result[i] = [];
+                for (let j = 0; j < matrix[i].length; j++) {
+                    result[i][j] = matrix[i][j] * diagonal[j];
+                }
+            }
+            return result;
+        }
+        
+    </script>
+</body>
+
+</html>link

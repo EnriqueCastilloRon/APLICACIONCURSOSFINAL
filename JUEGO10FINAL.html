@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla y Cálculo de Determinante</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 500px;
+            height: 500px;
+            position: relative;
+        }
+
+        .box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .box1 {
+            background-color: black;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box2 {
+            background-color: #ffffff;
+            z-index: 2;
+            opacity: 1.0;
+        }
+
+        .box3 {
+            background-color: transparent;
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .random-digit {
+            font-size: 20px;
+            margin: 0;
+            text-align: center;
+            color: white;
+            font-family: monospace;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+        }
+
+        td {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            border: 1px solid black;
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .lightblue {
+            background-color: lightblue;
+        }
+
+        .lightgreen {
+            background-color: lightgreen;
+        }
+
+        .lightyellow {
+            background-color: lightyellow;
+        }
+
+        .editable {
+            background-color: lightblue;
+            contenteditable: true;
+        }
+
+        .editable-lightgreen {
+            background-color: lightgreen;
+            contenteditable: true;
+        }
+
+        .non-editable {
+            background-color: lightyellow;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+            z-index: 4;
+            position: relative;
+        }
+
+        .results {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            z-index: 4;
+            position: relative;
+        }
+
+        .result-box {
+            margin: 0 10px;
+            background-color: white;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+        <style>
+            #messageBox {
+                display: none;
+                border: 1px solid #000;
+                padding: 20px;
+                margin: 20px;
+                text-align: center;
+                width: 650px;
+                height: 130px;
+                position: relative;
+
+            }
+
+            #messageBox button {
+                margin-top: 20px;
+            }
+
+            .message {
+                text-align: center;
+                margin-top: 20px;
+                z-index: 4;
+                position: relative;
+                background-color: lightcoral;
+            }
+
+            #okButton {
+                text-align: center;
+                display: block;
+                margin-bottom: 0px;
+                margin: auto;
+            }
+
+            #messageTextid {
+                font-size: 20px;
+            }
+        </style>
+        <style>
+            .inline {
+                display: inline-block;
+                margin-left: 10px; /* Ajusta el espacio entre el texto y el botón */
+            }
+        </style>
+</head>
+<body>
+    <div id="messageBox" class="message" style="display: none;">
+        <div id="messageTextid"></div>
+        <button id="okButton" onclick="hideText()">OK</button>
+    </div>
+    <!--
+    <div id="messageBox" class="message">
+        <p id="messageTextid"></p>
+        <button onclick="hideText()">OK</button>
+    </div>
+    -->
+
+    <div class="container">
+        <div class="box box1">
+            <div id="randomDigitsContainer"></div>
+        </div>
+        <div class="box box3">
+            <table id="matrix">
+                <!-- La tabla se generará dinámicamente -->
+            </table>
+        </div>
+    </div>
+    <div class="buttons">
+        <button id = 'generateMatrix' onclick="generateMatrix()">Generate Matrix</button>
+        <button onclick="determinant1()">Determinant</button>
+        <button onclick="magicnumber()">Magic number</button>
+        <button onclick="magicword()">Magic word</button>
+        <button onclick="restorematrix()">Restore Matrix</button>
+    </div>
+    <!--
+    <div class="results">
+        <div id="determinantid" class="result-box"></div>
+        <div id="magicnumberid" class="result-box"></div>
+        <div id="magicwordid" class="result-box"></div>
+
+    </div>
+
+
+    -->
+    <script>
+        function examples(nnnnn){
+                switch (nnnnn) {
+                    case 1:
+                        matrix=[
+                        [0, 0, 0, 0, 1, 0, 0],
+                        [0, 6, 0, 0, -5, 0, -6],
+                        [0, 0, 0, -4, -5, -3, 4],
+                        [-5, 0, -2, -2, 9, 0, 0],
+                        [0, 0, 0, 10, -2, 0, 0],
+                        [-1, 0, 0, 10, -8, 0, 0],
+                        [0, 1, 0, 0, -3, -3, 2]];
+                        break;
+                    case 2:
+                        matrix=[
+                        [0, 0, -1, 0, 0, -2, 0],
+                        [3, 0, 3, 0, -4, -10, 0],
+                        [0, 0, 10, 0, 0, 0, 3],
+                        [0, 0, 0, 0, 0, 0, -2],
+                        [-4, -2, 0, 0, 0, 10, -8],
+                        [-4, -4, 0, 0, -8, 0, 4],
+                        [-3, 0, 10, 10, 0, -3, 8]];
+                        break;
+                    case 3:
+                        matrix=[
+                        [0, -2, -7, -9, 0, -2, 0],
+                        [-9, 0, 6, 0, 10, 0, -3],
+                        [0, 0, 0, 0, -6, 6, 0],
+                        [2, 0, 0, 0, 0, 3, -3],
+                        [0, 0, 0, 0, 9, -8, 0],
+                        [1, 0, 0, 0, 0, -1, 0],
+                        [0, 0, 0, 9, 0, 0, -3]];
+                        break;
+                    case 4:
+                        matrix=[
+                        [10, 0, -7, -6, 10, -10, -6],
+                        [0, 5, -6, 8, 0, 0, 0],
+                        [8, 6, -2, 0, 0, 0, 0],
+                        [0, 0, 0, 1, 0, 0, 0],
+                        [0, 0, 0, 3, 0, 0, 1],
+                        [0, 7, 0, 9, 0, 3, 8],
+                        [0, -2, 0, 0, 0, 0, 2]];
+                        break;
+                    case 5:
+                        matrix=[
+                        [0, -9, 7, 0, 7, 7, -4],
+                        [-10, 0, 0, -9, 0, -10, 0],
+                        [0, 0, 0, -7, 4, 3, 1],
+                        [0, -1, -10, -10, -7, 9, 0],
+                        [1, 0, 0, -1, 0, 0, 0],
+                        [0, 0, 0, 8, -4, 6, 0],
+                        [0, 0, 0, -9, 0, 0, 0]];
+                        break;
+                    case 6:
+                        matrix=[
+                        [0, 0, 0, 0, 1, 0, 0],
+                        [0, 6, 0, 0, -5, 0, -6],
+                        [0, 0, 0, -4, -5, -3, 4],
+                        [-5, 0, -2, -2, 9, 0, 0],
+                        [0, 0, 0, 10, -2, 0, 0],
+                        [-1, 0, 0, 10, -8, 0, 0],
+                        [0, 1, 0, 0, -3, -3, 2]];
+                        break;
+                    default:
+                        n = "invalid n";
+                    }
+
+                return matrix
+            }
+
+        function getRandomInt(a, b) {
+            return Math.floor(Math.random() * (b - a + 1)) + a;
+        }
+        function restorematrix(){
+            eraseTable();
+            generateTable();
+        }
+        function invertMatrix(matrix0){
+            const n = matrix0.length;
+            const identity = [];
+            for (let i = 0; i < n; i++) {
+                identity[i] = [];
+                for (let j = 0; j < n; j++) {
+                    identity[i][j] = (i === j) ? 1 : 0;
+                }
+            }
+
+            // Augment the matrix with the identity matrix
+            for (let i = 0; i < n; i++) {
+                matrix0[i] = matrix0[i].concat(identity[i]);
+            }
+
+            // Apply Gauss-Jordan elimination
+            for (let i = 0; i < n; i++) {
+                // Make the diagonal contain all 1's
+                let diagElement = matrix0[i][i];
+                if (diagElement === 0) {
+                    for (let k = i + 1; k < n; k++) {
+                        if (matrix0[k][i] !== 0) {
+                            [matrix0[i], matrix0[k]] = [matrix0[k], matrix0[i]];
+                            diagElement = matrix0[i][i];
+                            break;
+                        }
+                    }
+                }
+                for (let j = 0; j < 2 * n; j++) {
+                    matrix0[i][j] /= diagElement;
+                }
+
+                // Make the other elements in the column 0
+                for (let k = 0; k < n; k++) {
+                    if (k !== i) {
+                        const factor = matrix0[k][i];
+                        for (let j = 0; j < 2 * n; j++) {
+                            matrix0[k][j] -= factor * matrix0[i][j];
+                        }
+                    }
+                }
+            }
+
+            // Extract the inverse matrix
+            const inverse = [];
+            for (let i = 0; i < n; i++) {
+                inverse[i] = matrix0[i].slice(n, 2 * n);
+            }
+
+            return inverse;
+        }
+        function transposeMatrix(matrix) {
+            let transposed = [];
+            for (let i = 0; i < matrix[0].length; i++) {
+                transposed[i] = [];
+                for (let j = 0; j < matrix.length; j++) {
+                    transposed[i][j] = matrix[j][i];
+                }
+            }
+            return transposed;
+        }
+
+        function generateTable() {
+            let listNullElements = [];
+            let listIntegers = [];
+            let listIntegersValues = [];
+            const table = document.getElementById('matrix');
+            
+            aaa=determinantOfMatrix(matrix);
+            bbb=determinantOfMatrix(invMatrix);
+            console.log('check=' + aaa*bbb)
+            console.log('det=' + det + ' magicnumbervalue=' + magicnumbervalue)
+            invMatrix=inverse(matrix)
+
+            for (let i = 0; i < 7; i++) {
+                const row = document.createElement('tr');
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement('td');
+                    cell.textContent = matrix[i][j];
+                    cell.classList.add('non-editable');
+                    let inversevalue = invMatrix[j][i];
+
+                    if (inversevalue < 1.5 && inversevalue > 0.5 && Number.isInteger(inversevalue)) {
+                        listIntegers.push([i,j]);
+                        listIntegersValues.push(inversevalue);
+                    }
+                    
+                    console.log(inversevalue, inversevalue === 0);
+                    
+                    if (inversevalue === 0) {
+                        listNullElements.push([i,j]);
+                    }
+                    
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+
+            const editableCells1 = listNullElements;
+            const editableCells2 = listIntegers;
+            
+
+            editableCells1.forEach(([row, col]) => {
+                const cell = table.rows[row].cells[col];
+                cell.classList.remove('non-editable');
+                cell.classList.add('lightblue', 'editable');
+                cell.contentEditable = true;
+                cell.addEventListener('input', () => {
+                    cell.style.color = 'red';
+                    document.getElementById('messageBox').style.display = 'none';
+                    cell.style.fontSize = '36px'; // Cambia el tamaño de la fuente aquí
+                });
+            });
+
+            editableCells2.forEach(([row, col]) => {
+                const cell = table.rows[row].cells[col];
+                cell.classList.remove('non-editable');
+                cell.classList.add('lightgreen', 'editable-lightgreen');
+                cell.contentEditable = true;
+                cell.addEventListener('input', () => {
+                    cell.style.color = 'red';
+                    document.getElementById('messageBox').style.display = 'none';
+                    cell.style.fontSize = '36px'; // Cambia el tamaño de la fuente aquí
+                });
+            });
+        }
+        /*
+        function generateTable() {
+            const table = document.getElementById('matrix');
+            for (let i = 0; i < 7; i++) {
+                const row = document.createElement('tr');
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement('td');
+                    cell.textContent = matrix[i][j];
+                    cell.classList.add('non-editable');
+                    row.appendChild(cell);
+                }
+                table.appendChild(row);
+            }
+
+            const editableCells1 = listNullElements;
+            const editableCells2 = listIntegers;
+
+            editableCells1.forEach(([row, col]) => {
+                const cell = table.rows[row].cells[col];
+                cell.classList.remove('non-editable');
+                cell.classList.add('lightblue', 'editable');
+                cell.contentEditable = true;
+            });
+
+            editableCells2.forEach(([row, col]) => {
+                const cell = table.rows[row].cells[col];
+                cell.classList.remove('non-editable');
+                cell.classList.add('lightgreen', 'editable-lightgreen');
+                cell.contentEditable = true;
+            });
+        }
+        */
+        function eraseTable() {
+            const table = document.getElementById('matrix');
+            while (table.firstChild) {
+                table.removeChild(table.firstChild);
+            }
+        }
+
+        
+        // Función para generar una matriz 7x7 con más de la mitad de los elementos iguales a cero
+        function generateSparseMatrix() {
+            let matrix = [];
+            for (let i = 0; i < 7; i++) {
+                let row = [];
+                for (let j = 0; j < 7; j++) {
+                    row.push(Math.random() < 0.4 ? 0 : Math.floor(Math.random() * 21) - 10);
+                }
+                matrix.push(row);
+            }
+            return matrix;
+        }
+
+        // Función para calcular el determinante de una matriz
+        function determinant(matrix) {
+            if (matrix.length !== matrix[0].length) {
+                throw new Error("La matriz no es cuadrada");
+            }
+            if (matrix.length === 2) {
+                return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+            }
+            let det = 0;
+            for (let i = 0; i < matrix.length; i++) {
+                let subMatrix = matrix.slice(1).map(row => row.filter((_, j) => j !== i));
+                det += matrix[0][i] * determinant(subMatrix) * (i % 2 === 0 ? 1 : -1);
+            }
+            return det;
+        }
+
+        // Función para calcular la inversa de una matriz
+        function inverse(matrix) {
+            let det = determinant(matrix);
+            if (det === 0) {
+                throw new Error("La matriz no tiene inversa");
+            }
+            let size = matrix.length;
+            let adjugate = [];
+            for (let i = 0; i < size; i++) {
+                let row = [];
+                for (let j = 0; j < size; j++) {
+                    let subMatrix = matrix
+                        .filter((_, m) => m !== i)
+                        .map(row => row.filter((_, n) => n !== j));
+                    row.push(determinant(subMatrix) * ((i + j) % 2 === 0 ? 1 : -1));
+                }
+                adjugate.push(row);
+            }
+            let inverseMatrix = adjugate[0].map((_, colIndex) => adjugate.map(row => row[colIndex]));
+            return inverseMatrix.map(row => row.map(value => value / det));
+        }
+
+        function getMatrixFromTable() {
+            const table = document.getElementById('matrix');
+            const matrix = [];
+            for (let i = 0; i < 7; i++) {
+                const row = [];
+                for (let j = 0; j < 7; j++) {
+                    row.push(parseInt(table.rows[i].cells[j].textContent));
+                }
+                matrix.push(row);
+            }
+            return matrix;
+        }
+       
+        function setMatrixToTable(matrix) {
+            const table = document.getElementById('matrix');
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < 7; j++) {
+                    table.rows[i].cells[j].textContent = matrix[i][j];
+                }
+            }
+        }
+
+        function generateMatrix(){
+            eraseTable();
+            [matrix, invMatrix, det, invDet]=generateAndInvertMatrix()
+            magicnumbervalue=det;
+            magicwordvalue='DOUBLE';
+            document.getElementById('messageBox').style.display = 'block';
+            generateTable();
+            setMatrixToTable(matrix);
+            printMatrix(matrix);
+            printMatrix(invMatrix);
+            // document.getElementById('determinantid').style.display = 'none';
+            // document.getElementById('magicnumberid').style.display = 'none';
+            // document.getElementById('magicwordid').style.display = 'none';
+        }
+        /*
+        function checkInverseConditions(inverseMatrix) {
+            printMatrix(inverseMatrix)
+            
+            let rowWithThreeZeros = inverseMatrix.some(row => row.filter(x => x === 0).length >= 3);
+            let rowWithOneOne = inverseMatrix.some(row => row.some(x => x < 1.5 && x > 0.5 && Number.isInteger(x)));
+            // let hasPositiveIntegerElement = inverseMatrix.some(row => row.some(x => x < 1.5 && x > 0.5 && Number.isInteger(x)));
+            check=rowWithThreeZeros && rowWithOneOne;
+            return check;
+        }
+        */
+        function checkInverseConditions(inverseMatrix) {
+            printMatrix(inverseMatrix)
+            
+            let rowWithThreeZeros = inverseMatrix.some(row => row.filter(x => x === 0).length >= 3);
+            let rowWithOneOne = inverseMatrix.some(row => row.some(x => x < 1.5 && x > 0.5 && Number.isInteger(x)));
+            // let hasPositiveIntegerElement = inverseMatrix.some(row => row.some(x => x < 1.5 && x > 0.5 && Number.isInteger(x)));
+            check=rowWithThreeZeros && rowWithOneOne;
+            return check;
+        }
+
+        // Función para generar una matriz no singular y calcular su inversa
+        function generateAndInvertMatrix() {
+            let matrix;
+            let det;
+            let invMatrix;
+            let iterationCount = 0;
+            const maxIterations = 1000;
+
+            do {
+                matrix = generateSparseMatrix();
+                printMatrix(matrix)
+                det = determinant(matrix);
+                if (det !== 0) {
+                    invMatrix = inverse(matrix);                }
+                iterationCount++;
+            } while ((det === 0 || !checkInverseConditions(invMatrix)) && iterationCount < maxIterations);
+
+            if (iterationCount >= maxIterations) {
+                console.error('No se encontró una solución válida en 1000 iteraciones.');
+                return null;
+            }
+
+            let invDet = determinant(invMatrix);
+            let productDet = det * invDet;
+
+            // let [listNullElements, listIntegers, listIntegersValues] = extractElements(invMatrix);
+
+            // console.log('listNullElements=' + listNullElements + ' listIntegers = ' + listIntegers);
+            return [matrix, invMatrix, det, invDet];
+        }
+        /*
+        function generateAndInvertMatrix() {
+            let matrix;
+            let det;
+            let invMatrix;
+            let iterationCount = 0;
+            const maxIterations = 1000;
+
+            do {
+                matrix = generateSparseMatrix();
+                printMatrix(matrix)
+                det = determinant(matrix);
+                if (det !== 0) {
+                    invMatrix = inverse(matrix);
+                    transposedinvMatrix = transposeMatrix(invMatrix)
+                }
+                iterationCount++;
+            } while ((det === 0 || !checkInverseConditions(invMatrix) || !validateLists(invMatrix)) && iterationCount < maxIterations);
+
+            if (iterationCount >= maxIterations) {
+                console.error('No se encontró una solución válida en 1000 iteraciones.');
+                return null;
+            }
+
+            let invDet = determinant(invMatrix);
+            let productDet = det * invDet;
+
+            let [listNullElements, listIntegers, listIntegersValues] = extractElements(invMatrix);
+
+            console.log('listNullElements=' + listNullElements + ' listIntegers = ' + listIntegers);
+            return [matrix, invMatrix, det, invDet, listNullElements, listIntegers, listIntegersValues];
+        }
+        */
+        /*
+        function validateLists(invMatrix) {
+            let [listNullElements, listIntegers] = extractElements(invMatrix);
+            if(listNullElements.length == 3 && listIntegers.length == 1){
+                if(listNullElements[0][0]==listIntegers[0][0]){
+                    return false
+                }else{
+                    return true
+                }
+            }
+            return listNullElements.length == 3 && listIntegers.length == 1;
+        }
+        */
+        /*
+        function extractElements(invMatrix) {
+            let listNullElements = [];
+            let listIntegers = [];
+            let listIntegersValues = [];
+
+            let possibleRowsForNulls = [];
+            let possibleRowsForIntegers = [];
+
+            let center = Math.floor(invMatrix.length / 2);
+
+            for (let i = 0; i < 7; i++) {
+                let nullCount = 0;
+                for (let j = 0; j < 7; j++) {
+                    if (invMatrix[i][j] === 0) {
+                        nullCount++;
+                    }
+                    if (invMatrix[i][j] < 1.5 && invMatrix[i][j] > 0.5 && Number.isInteger(invMatrix[i][j])) {
+                        possibleRowsForIntegers.push(i);
+                        listIntegers.push([i, j]);
+                        listIntegersValues.push(invMatrix[i][j]);
+                    }
+                }
+                if (nullCount >= 3) {
+                    possibleRowsForNulls.push(i);
+                }
+            }
+
+            // Seleccionar la fila más cercana al centro para ceros
+            let closestRowForNulls = -1;
+            if (possibleRowsForNulls.length > 0) {
+                closestRowForNulls = possibleRowsForNulls.reduce((a, b) => Math.abs(a - center) < Math.abs(b - center) ? a : b);
+                let nullElementsInRow = 0;
+                for (let j = 0; j < 7; j++) {
+                    if (invMatrix[closestRowForNulls][j] === 0 && nullElementsInRow < 3) {
+                        listNullElements.push([closestRowForNulls, j]);
+                        nullElementsInRow++;
+                    }
+                }
+            }
+
+            // Seleccionar la fila más cercana al centro para unos, diferente de la fila de ceros
+            possibleRowsForIntegers = possibleRowsForIntegers.filter(row => row !== closestRowForNulls);
+            if (possibleRowsForIntegers.length > 0) {
+                let closestRowForIntegers = possibleRowsForIntegers.reduce((a, b) => Math.abs(a - center) < Math.abs(b - center) ? a : b);
+                listIntegers = listIntegers.filter(([i, j]) => i === closestRowForIntegers);
+                console.log(listIntegersValues);
+                console.log(closestRowForIntegers);
+                listIntegersValues = listIntegersValues.filter((_, index) => listIntegers[index][0] === closestRowForIntegers);
+            }
+
+            return [listNullElements, listIntegers, listIntegersValues];
+        }
+        */
+        // COMIENZO
+        matrix=[[1,2,1],[0,0,1],[3,-2,1]];
+        printMatrix(matrix,'matrix')
+        aux=determinantOfMatrix(matrix)
+        console.log(aux)
+        matrixinv=inverse(matrix)
+        printMatrix(matrixinv,'matrixinv')
+        aux2=determinantOfMatrix(matrixinv)
+        console.log(aux2)
+        console.log(aux2*aux)
+        matrix=[];
+        listNullElements = [];
+        listIntegers = [];
+        listIntegersValues = [];
+        matrix=[];
+        det=0;
+        invDet=0;
+        // ONLY THE FIRST TIME
+        firsttime=1;
+        [matrix, invMatrix, det, invDet]=generateAndInvertMatrix()
+        printMatrix(invMatrix);
+        magicnumbervalue=det;
+        magicwordvalue='DOUBLE';
+        //generateTable();
+        // document.getElementById('determinantid').style.display = 'none';
+        // document.getElementById('magicnumberid').style.display = 'none';
+        // document.getElementById('magicwordid').style.display = 'none';
+        document.addEventListener('DOMContentLoaded', () => {
+            if(firsttime){
+                eraseTable();
+                matrix=examples(getRandomInt(1, 5));
+                matrix=examples(1);
+                console.log('matrix =' + matrix)
+                det=determinantOfMatrix(matrix);
+                magicnumbervalue=det;
+                console.log('det=' + det + ' magicnumbervalue=' + magicnumbervalue)
+                // invMatrix=inverse(matrix);
+                console.log('invMatrix =' + invMatrix);
+                firsttime=0;
+                generateTable();
+            } else{
+                generateMatrix();
+            }
+
+            generateRandomDigits();
+        });
+
+
+        
+        /*
+        function invertMatrix(matrix) {
+            const n = matrix.length;
+            const result = matrix.map(row => row.slice());
+
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    result[i][j] = matrix[n - i - 1][n - j - 1];
+                }
+           }
+            return result;
+        }
+        */
+        
+        /*
+        function transformMatrix() {
+            const matrixA = getMatrixFromTable();
+            const list1 = [[4, 1], [4, 2], [4, 4]];
+            const list2 = [[2, 5]];
+
+            // Cambiar elementos traspuestos de la lista 1 a ceros
+            list1.forEach(([row, col]) => {
+                if (row < 7 && col < 7) {
+                    matrixA[col][row] = 0;
+                }
+            });
+
+            // Cambiar elementos traspuestos de la lista 2 a unos
+            list2.forEach(([row, col]) => {
+                if (row < 7 && col < 7) {
+                    matrixA[col][row] = 1;
+                }
+            });
+            setMatrixToTable(matrixA)
+            detA=determinantOfMatrix(matrixA);
+            // Invertir la matriz A para obtener la matriz B
+            const matrixB = invertMatrix(matrixA);
+            setMatrixToTable(matrixB);
+            detB=determinantOfMatrix(matrixB);
+            console.log(detA,detB)
+
+        }
+        */
+        
+        function calculateDeterminant() {
+            const matrix = getMatrixFromTable();
+            return determinantOfMatrix(matrix);
+        }
+        
+
+        function determinant1() {
+            const determinant = calculateDeterminant();
+
+            /*
+            const determinantElement = document.getElementById('determinantid');
+            determinantElement.textContent = determinant;
+            
+            if (determinantElement.style.display === 'none') {
+                determinantElement.style.display = 'block';
+            } else {
+                determinantElement.style.display = 'none';
+            }
+                */
+            showText('EL DETERMINANTE DE ESTA MATRIZ ES : ' + determinant, '24px', '50px');              
+            
+        }
+
+
+        function magicnumber() {
+            /*
+            // determinant = calculateDeterminant();
+            document.getElementById('magicnumberid').textContent = det;
+            if(document.getElementById('magicnumberid').style.display ==='none'){
+                document.getElementById('magicnumberid').style.display = 'block';
+            }else{
+                document.getElementById('magicnumberid').style.display = 'none';
+            }
+                */
+            showText('YOUR MAGIC NUMBER IS : '+ magicnumbervalue,  '24px', '50px');        
+        }
+       
+
+        function magicword() {
+            /*
+            document.getElementById('magicwordid').textContent = 'Double';
+
+            if(document.getElementById('magicwordid').style.display ==='none'){
+                document.getElementById('magicwordid').style.display = 'block';
+            }else{
+                document.getElementById('magicwordid').style.display = 'none';
+            }
+            */
+           texto = 'YOUR MAGIC WORD IS : ' + magicwordvalue;
+            showText(texto, '24px', '50px');       
+        }
+        
+        function determinantOfMatrix(matrix) {
+            const n = matrix.length;
+            if (n === 1) return matrix[0][0];
+            if (n === 2) return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+
+            let determinant = 0;
+            for (let i = 0; i < n; i++) {
+                const subMatrix = matrix.slice(1).map(row => row.filter((_, j) => j !== i));
+                determinant += matrix[0][i] * determinantOfMatrix(subMatrix) * (i % 2 === 0 ? 1 : -1);
+            }
+            return determinant;
+        }
+        
+
+        function getRandomDigit() {
+            return Math.floor(Math.random() * 10);
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function generateRandomDigits() {
+            const container = document.getElementById('randomDigitsContainer');
+            for (let i = 0; i < 30; i++) {
+                let randomDigits = '';
+                for (let j = 0; j < 60; j++) {
+                    const digit = getRandomDigit();
+                    const color = getRandomColor();
+                    randomDigits += `<span style="color:${color}">${digit}</span>`;
+                }
+                const div = document.createElement('div');
+                div.className = 'random-digit';
+                div.innerHTML = randomDigits;
+                container.appendChild(div);
+            }
+        }
+        /*
+        function preMultiplyByDiagonalMatrix(diagonal, matrix) {
+            let result = [];
+            for (let i = 0; i < matrix.length; i++) {
+                result[i] = [];
+                for (let j = 0; j < matrix[i].length; j++) {
+                    result[i][j] = diagonal[i] * matrix[i][j];
+                }
+            }
+            return result;
+        }
+
+        // Función para la post-multiplicación por una matriz diagonal
+        function postMultiplyByDiagonalMatrix(matrix, diagonal) {
+            let result = [];
+            for (let i = 0; i < matrix.length; i++) {
+                result[i] = [];
+                for (let j = 0; j < matrix[i].length; j++) {
+                    result[i][j] = matrix[i][j] * diagonal[j];
+                }
+            }
+            return result;
+        }
+        */
+        // Función para imprimir una matriz en la consola
+        function printMatrix(matrix, name) {
+            console.log(name + ":");
+            matrix.forEach(row => {
+                console.log(row.join("\t"));
+            });
+        }
+        /*
+        function reemplazarElementos(vector, conjunto) {
+            return vector.map(elemento => {
+                if (elemento !== 1) {
+                    // Elegir un elemento aleatorio del conjunto para cada elemento diferente de 1
+                    const indiceAleatorio = Math.floor(Math.random() * conjunto.length);
+                    return conjunto[indiceAleatorio];
+                }
+                return elemento;
+            });
+        }
+
+        basicmatrix=[[-1,2,1,1,-1,-1,1],
+        [1,-2,-1,0,1,1,-1],
+        [-2,3,-1,2,0,-2,2],
+        [1,-2,1,-1,0,1,-1],
+        [0,0,1,0,0,0,0],
+        [-5,6,-2,7,0,-4,3],
+        [4,-6,0,4,1,4,-3]]
+
+        inversebasicmatrix=[[10,11,0,-1,0,-1,-1],
+        [0,0,-1,-2,1,0,0],
+        [0,0,0,0,1,0,0],
+        [1,1,0,0,0,0,0],
+        [-1,0,0,-1,2,0,0],
+        [-16,-18,0,-1,1,1,2],
+        [-7,-8,2,1,0,0,1]]
+
+        printMatrix(basicmatrix, 'basicmatrix')
+        printMatrix(inversebasicmatrix, 'inversebasicmatrix')
+
+        plantilladiagonalrow0=[1,0,1,0,0,1,0];
+        plantilladiagonalcol0=[1,1,0,0,1,0,0];
+        validprimefactors=[1,2,3,5]
+        diagonalrow=reemplazarElementos(plantilladiagonalrow0, validprimefactors)
+        diagonalcol=reemplazarElementos(plantilladiagonalcol0, validprimefactors)
+
+        aux3=preMultiplyByDiagonalMatrix(diagonalrow, inversebasicmatrix)
+        printMatrix(aux3, 'matrixafterrowchange')
+
+        inversematrix=postMultiplyByDiagonalMatrix(aux3,diagonalcol)
+        printMatrix(inversematrix, 'inversematrix')
+        matrix=invertMatrix(inversematrix)
+        printMatrix(matrix, 'matrix')
+
+        // Generar un vector aleatorio de dimensión 7
+        let vectorAleatorio = generarVectorAleatorio(7);
+    
+        // Mostrar el vector en la consola
+        console.log("Vector aleatorio de dimensión 7:");
+        console.log(vectorAleatorio);
+
+        function generarVectorAleatorio(dimension) {
+            const elementos = [1, 2, 3, 5];
+            const probabilidades = [0.5, 0.2, 0.2, 0.1];
+            let vector = [];
+    
+            for (let i = 0; i < dimension; i++) {
+                let random = Math.random();
+                let acumulado = 0;
+    
+                for (let j = 0; j < elementos.length; j++) {
+                    acumulado += probabilidades[j];
+                    if (random < acumulado) {
+                        vector.push(elementos[j]);
+                        break;
+                       }
+                }
+            }
+    
+            return vector;
+        }
+        */
+        </script>
+        <script>
+            function showText(texto, fontsize, height) {
+                const messageBox = document.getElementById('messageBox');
+                const messageText = document.getElementById('messageTextid');
+                
+                //const formattedText = 'La magia de este experimento está en las propiedades matemáticas<br>de las matrices, unas conocidas y otras, inéditas';
+
+                messageText.innerHTML  = texto ;
+                messageText.style.fontSize = fontsize;
+                messageBox.style.display = 'block';
+                messageBox.style.height = height;
+            }
+        
+    
+            function hideText() {
+                const messageBox = document.getElementById('messageBox');
+                messageBox.style.display = 'none';
+            }
+            // Llamar a la función con el texto formateado
+            showText('La magia de este experimento está en las propiedades <br> matemáticas de las matrices, unas pocas conocidas <br> y entendidas y otras, muchas, inéditas', '30px', '150px');        
+            
+        </script>
+    </body>
+</html>
