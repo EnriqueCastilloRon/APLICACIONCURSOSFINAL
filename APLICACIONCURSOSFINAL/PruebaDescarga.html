@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Archivo HTML Fijo</title>
+</head>
+<body>
+    <h1>Descargar Archivo HTML Fijo</h1>
+    <button id="downloadButton">Descargar fichero.html</button>
+
+    <script>
+        document.getElementById('downloadButton').addEventListener('click', function() {
+            const fileUrl = 'Orthogonalization_Algorithm9PRUEBAFINAL.html'; // URL del archivo fijo
+
+            const link = document.createElement('a');
+            link.href = fileUrl;
+            link.download = 'Orthogonalization_Algorithm.html'; // Nombre del archivo descargado
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link); // Limpiar el DOM
+        });
+    </script>
+</body>
+</html>
+
